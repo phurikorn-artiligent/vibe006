@@ -51,7 +51,7 @@ const sidebarRoutes = [
   {
     label: "Operations",
     icon: ArrowRightLeft,
-    href: "/operations", // Submenu? Or just page?
+    href: "/operations/check-out",
   },
   {
     label: "Settings",
