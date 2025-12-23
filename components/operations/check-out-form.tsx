@@ -104,7 +104,7 @@ export function CheckOutForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl bg-white p-6 rounded-lg border shadow-sm">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl glass-card p-6 rounded-xl border shadow-sm">
         
         {/* Employee Selection */}
         <FormField
