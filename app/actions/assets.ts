@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus, Prisma } from "@prisma/client";
 
 const assetSchema = z.object({
   code: z.string().min(1, "Asset Code is required"),
@@ -54,5 +54,94 @@ export async function createAsset(data: z.infer<typeof assetSchema>) {
   } catch (error) {
     console.error("Failed to create asset:", error);
     return { success: false, error: "Failed to create asset" };
+  }
+}
+
+export type GetAssetsParams = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: AssetStatus;
+  typeId?: number;
+};
+
+export async function getAssets({
+  page = 1,
+  limit = 10,
+  search,
+  status,
+  typeId,
+}: GetAssetsParams) {
+  try {
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.AssetWhereInput = {
+      AND: [
+        status ? { status } : {},
+        typeId ? { typeId } : {},
+        search
+          ? {
+            OR: [
+              { name: { contains: search, mode: "insensitive" } },
+              { code: { contains: search, mode: "insensitive" } },
+              { serialNumber: { contains: search, mode: "insensitive" } },
+            ],
+          }
+          : {},
+      ],
+    };
+
+    const [assets, total] = await Promise.all([
+      prisma.asset.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          type: true,
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.asset.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: assets,
+      metadata: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch assets:", error);
+    return { success: false, error: "Failed to fetch assets" };
+  }
+}
+
+export async function getAssetById(id: number) {
+  try {
+    const asset = await prisma.asset.findUnique({
+      where: { id },
+      include: {
+        type: true,
+        transactions: {
+          include: {
+            employee: true,
+          },
+          orderBy: { date: "desc" },
+        },
+      },
+    });
+
+    if (!asset) {
+      return { success: false, error: "Asset not found" };
+    }
+
+    return { success: true, data: asset };
+  } catch (error) {
+    console.error("Failed to fetch asset:", error);
+    return { success: false, error: "Failed to fetch asset" };
   }
 }
