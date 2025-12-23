@@ -1,5 +1,6 @@
 import { getAssetById } from "@/app/actions/assets";
 import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -50,17 +51,7 @@ export default async function AssetDetailPage(props: AssetDetailPageProps) {
           </Link>
           <h2 className="text-3xl font-bold tracking-tight">{asset.name}</h2>
           <Badge variant="outline">{asset.code}</Badge>
-          <Badge
-            variant={
-              asset.status === "AVAILABLE"
-                ? "default"
-                : asset.status === "MAINTENANCE"
-                ? "destructive"
-                : "secondary"
-            }
-          >
-            {asset.status.replace("_", " ")}
-          </Badge>
+          <StatusBadge status={asset.status} />
         </div>
         <Button variant="outline">
           <Pencil className="mr-2 h-4 w-4" /> Edit Asset

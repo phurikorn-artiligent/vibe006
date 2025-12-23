@@ -41,7 +41,7 @@ const sidebarRoutes = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
-    href: "/dashboard",
+    href: "/",
   },
   {
     label: "Asset Inventory",

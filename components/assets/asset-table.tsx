@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   Table,
   TableBody,
@@ -66,9 +66,7 @@ export function AssetTable({ assets }: AssetTableProps) {
                 <TableCell>{asset.type.name}</TableCell>
                 <TableCell>{asset.serialNumber || "-"}</TableCell>
                 <TableCell>
-                  <Badge variant={getStatusColor(asset.status) as any}>
-                    {asset.status.replace("_", " ")}
-                  </Badge>
+                  <StatusBadge status={asset.status} />
                 </TableCell>
                 <TableCell className="text-right">
                   <Link href={`/assets/${asset.id}`}>
