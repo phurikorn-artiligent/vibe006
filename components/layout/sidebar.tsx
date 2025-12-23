@@ -49,7 +49,12 @@ const sidebarRoutes = [
     href: "/assets",
   },
   {
-    label: "Operations",
+    label: "Check-in",
+    icon: ArrowRightLeft,
+    href: "/operations/check-in",
+  },
+  {
+    label: "Check-out",
     icon: ArrowRightLeft,
     href: "/operations/check-out",
   },
