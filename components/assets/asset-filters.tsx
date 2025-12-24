@@ -84,16 +84,18 @@ export function AssetFilters() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 py-4">
-      <Input
-        placeholder="Search code, name, serial..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="max-w-sm"
-      />
+    <div className="flex flex-col sm:flex-row gap-4 p-4 glass-card rounded-xl mb-6 items-center">
+      <div className="relative flex-1 max-w-sm">
+           <Input
+            placeholder="Search code, name, serial..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-4 border-slate-200"
+          />
+      </div>
       
       <Select value={status} onValueChange={setStatus}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[180px] border-slate-200">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
@@ -107,7 +109,7 @@ export function AssetFilters() {
       </Select>
 
       <Select value={typeId} onValueChange={setTypeId}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[180px] border-slate-200">
           <SelectValue placeholder="Asset Type" />
         </SelectTrigger>
         <SelectContent>
@@ -121,7 +123,7 @@ export function AssetFilters() {
       </Select>
 
       {(search || status !== "all" || typeId !== "all") && (
-        <Button variant="ghost" onClick={clearFilters} className="px-2 lg:px-3">
+        <Button variant="ghost" onClick={clearFilters} className="px-3 text-red-500 hover:text-red-600 hover:bg-red-50">
           Reset
           <X className="ml-2 h-4 w-4" />
         </Button>
