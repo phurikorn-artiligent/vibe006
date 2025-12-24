@@ -1,6 +1,7 @@
 "use client";
 
 import { Sidebar } from "@/components/layout/sidebar";
+import { MobileSidebar } from "@/components/layout/mobile-sidebar";
 
 export default function DashboardLayout({
   children,
@@ -13,6 +14,10 @@ export default function DashboardLayout({
         <Sidebar />
       </div>
       <main className="md:pl-72 pb-10">
+        <div className="flex items-center p-4 md:hidden">
+             <MobileSidebar />
+             <div className="font-bold ml-2">Asset Manager</div>
+        </div>
         {children}
       </main>
     </div>

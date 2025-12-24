@@ -98,6 +98,13 @@ export async function getAssets({
         take: limit,
         include: {
           type: true,
+          transactions: {
+            take: 1,
+            orderBy: { date: "desc" },
+            include: {
+              employee: true,
+            },
+          },
         },
         orderBy: { createdAt: "desc" },
       }),

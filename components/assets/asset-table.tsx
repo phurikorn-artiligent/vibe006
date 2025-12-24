@@ -8,12 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Asset, AssetType, AssetStatus } from "@prisma/client";
+import { Asset, AssetType, AssetStatus, Transaction, Employee } from "@prisma/client";
 import { Eye, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AssetWithRelations extends Asset {
   type: AssetType;
+  transactions: (Transaction & {
+    employee: Employee;
+  })[];
 }
 
 interface AssetTableProps {
@@ -42,6 +45,7 @@ export function AssetTable({ assets }: AssetTableProps) {
             <TableHead>Type</TableHead>
             <TableHead>Serial Number</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Current Holder</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -67,6 +71,11 @@ export function AssetTable({ assets }: AssetTableProps) {
                 <TableCell>{asset.serialNumber || "-"}</TableCell>
                 <TableCell>
                   <StatusBadge status={asset.status} />
+                </TableCell>
+                <TableCell>
+                  {asset.status === AssetStatus.IN_USE && asset.transactions[0]?.action === "CHECK_OUT" 
+                    ? `${asset.transactions[0].employee.firstName} ${asset.transactions[0].employee.lastName}`
+                    : "-"}
                 </TableCell>
                 <TableCell className="text-right">
                   <Link href={`/assets/${asset.id}`}>
