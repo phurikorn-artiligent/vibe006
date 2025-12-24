@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Asset, AssetType, AssetStatus, Transaction, Employee } from "@prisma/client";
-import { Eye, Edit } from "lucide-react";
+import { Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AssetWithRelations extends Asset {
@@ -24,62 +24,61 @@ interface AssetTableProps {
 }
 
 export function AssetTable({ assets }: AssetTableProps) {
-  
-  const getStatusColor = (status: AssetStatus) => {
-    switch (status) {
-      case "AVAILABLE": return "default"; // or "success" if we had one
-      case "IN_USE": return "secondary"; // or "blue"
-      case "MAINTENANCE": return "destructive"; // or "warning"
-      case "RETIRED": return "outline";
-      default: return "default";
-    }
-  };
-
   return (
-    <div className="rounded-md border bg-white">
+    <div className="rounded-xl border border-slate-200 bg-white/50 backdrop-blur-sm shadow-sm overflow-hidden">
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Code</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Serial Number</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Current Holder</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+        <TableHeader className="bg-slate-50/80 border-b border-slate-200">
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="font-semibold text-slate-700">Asset Code</TableHead>
+            <TableHead className="font-semibold text-slate-700">Name</TableHead>
+            <TableHead className="font-semibold text-slate-700">Type</TableHead>
+            <TableHead className="font-semibold text-slate-700">Serial No.</TableHead>
+            <TableHead className="font-semibold text-slate-700">Status</TableHead>
+            <TableHead className="font-semibold text-slate-700">Current Holder</TableHead>
+            <TableHead className="text-right font-semibold text-slate-700">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {assets.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center h-24">
-                No assets found.
+              <TableCell colSpan={7} className="text-center h-32 text-muted-foreground italic">
+                No assets found in inventory.
               </TableCell>
             </TableRow>
           ) : (
             assets.map((asset) => (
-              <TableRow key={asset.id} className="cursor-pointer hover:bg-muted/50" >
-                <TableCell className="font-medium">
+              <TableRow key={asset.id} className="cursor-pointer hover:bg-blue-50/50 transition-colors group border-b border-slate-100 last:border-0" >
+                <TableCell className="font-medium font-mono text-slate-600">
                   <Link href={`/assets/${asset.id}`} className="block h-full w-full">
                     {asset.code}
                   </Link>
                 </TableCell>
-                <TableCell>
+                <TableCell className="font-medium text-slate-900">
                     <Link href={`/assets/${asset.id}`}>{asset.name}</Link>
                 </TableCell>
-                <TableCell>{asset.type.name}</TableCell>
-                <TableCell>{asset.serialNumber || "-"}</TableCell>
+                <TableCell className="text-slate-500">{asset.type.name}</TableCell>
+                <TableCell className="text-slate-500 font-mono text-xs">{asset.serialNumber || "-"}</TableCell>
                 <TableCell>
-                  <StatusBadge status={asset.status} />
+                  <StatusBadge status={asset.status} className="shadow-none" />
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-slate-600">
                   {asset.status === AssetStatus.IN_USE && asset.transactions[0]?.action === "CHECK_OUT" 
-                    ? `${asset.transactions[0].employee.firstName} ${asset.transactions[0].employee.lastName}`
-                    : "-"}
+                    ? (
+                        <div className="flex items-center gap-2">
+                             <div className="h-6 w-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">
+                                {asset.transactions[0].employee.firstName[0]}
+                             </div>
+                             <span className="text-sm">{asset.transactions[0].employee.firstName} {asset.transactions[0].employee.lastName}</span>
+                        </div>
+                      )
+                    : <span className="text-slate-400">-</span>}
                 </TableCell>
                 <TableCell className="text-right">
                   <Link href={`/assets/${asset.id}`}>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="sm" className="hidden group-hover:inline-flex h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                        <ArrowRight className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="inline-flex group-hover:hidden h-8 w-8 p-0 text-slate-400">
                         <Eye className="h-4 w-4" />
                     </Button>
                   </Link>
