@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { AssetStatus, TransactionAction } from "@prisma/client";
+import { AssetStatus, TransactionAction } from "@/generated/client";
 
 // --- Check Out Action ---
 

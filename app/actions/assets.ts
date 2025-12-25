@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { AssetStatus, Prisma } from "@prisma/client";
+import { AssetStatus, Prisma } from "@/generated/client";
 
 const assetSchema = z.object({
   code: z.string().min(1, "Asset Code is required"),

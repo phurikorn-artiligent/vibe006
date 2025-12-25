@@ -5,7 +5,7 @@ import { AssetTable } from "@/components/assets/asset-table";
 import { AssetFilters } from "@/components/assets/asset-filters";
 import { AssetPagination } from "@/components/assets/asset-pagination";
 import { getAssets } from "@/app/actions/assets";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 
 interface AssetListPageProps {
   searchParams: Promise<{

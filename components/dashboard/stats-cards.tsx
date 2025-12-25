@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Box, CheckCircle, Wrench, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";

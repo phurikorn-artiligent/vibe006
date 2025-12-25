@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 import { getAssetTypes } from "@/app/actions/asset-types";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";

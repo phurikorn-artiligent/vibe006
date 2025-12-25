@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Asset, AssetType, AssetStatus, Transaction, Employee } from "@prisma/client";
+import { Asset, AssetType, AssetStatus, Transaction, Employee } from "@/generated/client";
 import { Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

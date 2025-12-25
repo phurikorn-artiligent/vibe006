@@ -43,7 +43,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getAssets } from "@/app/actions/assets";
 import { checkInAsset } from "@/app/actions/operations";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 
 const formSchema = z.object({
   assetId: z.number().min(1, "Asset is required"),

@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/client"
 }
 
 datasource db {
@@ -8,8 +9,8 @@ datasource db {
 }
 
 model AssetType {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
   description String?
   assets      Asset[]
 }
@@ -25,9 +26,9 @@ model Asset {
   typeId       Int
   type         AssetType     @relation(fields: [typeId], references: [id])
   transactions Transaction[]
-  
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AssetStatus {

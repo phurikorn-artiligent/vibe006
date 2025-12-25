@@ -36,7 +36,7 @@ import { createAsset } from "@/app/actions/assets";
 import { getAssetTypes } from "@/app/actions/asset-types";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 
 // Adjusted schema for form:
 const formSchema = z.object({

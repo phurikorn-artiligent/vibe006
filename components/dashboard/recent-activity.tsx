@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns"; // Make sure date-fns is installed or use native Intl
-import { Transaction, Asset, Employee, TransactionAction } from "@prisma/client";
+import { Transaction, Asset, Employee, TransactionAction } from "@/generated/client";
 
 interface RecentActivityProps {
   activity: (Transaction & {

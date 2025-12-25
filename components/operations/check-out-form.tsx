@@ -37,7 +37,7 @@ import { useRouter } from "next/navigation";
 import { getEmployees } from "@/app/actions/employees";
 import { getAssets } from "@/app/actions/assets";
 import { checkOutAsset } from "@/app/actions/operations";
-import { AssetStatus, Employee } from "@prisma/client";
+import { AssetStatus, Employee } from "@/generated/client";
 
 const formSchema = z.object({
   employeeId: z.number().min(1, "Employee is required"),

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { AssetStatus } from "@prisma/client";
+import { AssetStatus } from "@/generated/client";
 
 export async function getDashboardStats() {
   try {
