@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns"; // Make sure date-fns is installed or use native Intl
-import { Transaction, Asset, Employee, TransactionAction } from "@/generated/client";
+import { Transaction, Asset, User, TransactionAction } from "@/generated/client";
 
 interface RecentActivityProps {
   activity: (Transaction & {
     asset: Asset;
-    employee: Employee;
+    user: User;
   })[];
 }
 
@@ -30,7 +30,7 @@ export function RecentActivity({ activity }: RecentActivityProps) {
               <p className="text-sm text-muted-foreground">
                 {transaction.action === TransactionAction.CHECK_OUT ? "Assigned to" : "Returned by"}{" "}
                 <span className="font-medium text-foreground">
-                  {transaction.employee.firstName} {transaction.employee.lastName}
+                  {transaction.user.firstName} {transaction.user.lastName}
                 </span>
               </p>
             </div>

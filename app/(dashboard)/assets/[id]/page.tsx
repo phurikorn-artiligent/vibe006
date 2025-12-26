@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import Link from "next/link";
+import { auth } from "@/auth";
 import { ArrowLeft, Pencil } from "lucide-react";
 import {
   Table,
@@ -24,6 +25,9 @@ interface AssetDetailPageProps {
 export default async function AssetDetailPage(props: AssetDetailPageProps) {
   const params = await props.params;
   const id = Number(params.id);
+  const session = await auth();
+  const isAdmin = session?.user?.role === "ADMIN";
+
   const result = await getAssetById(id);
 
   if (!result.success || !result.data) {
@@ -37,7 +41,7 @@ export default async function AssetDetailPage(props: AssetDetailPageProps) {
   const lastTransaction = asset.transactions[0];
   const currentHolder = 
     lastTransaction?.action === "CHECK_OUT" 
-      ? lastTransaction.employee 
+      ? lastTransaction.user 
       : null;
 
   return (
@@ -53,9 +57,12 @@ export default async function AssetDetailPage(props: AssetDetailPageProps) {
           <Badge variant="outline">{asset.code}</Badge>
           <StatusBadge status={asset.status} />
         </div>
-        <Button variant="outline">
-          <Pencil className="mr-2 h-4 w-4" /> Edit Asset
-        </Button>
+
+        {isAdmin && (
+            <Button variant="outline">
+              <Pencil className="mr-2 h-4 w-4" /> Edit Asset
+            </Button>
+        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -111,7 +118,7 @@ export default async function AssetDetailPage(props: AssetDetailPageProps) {
                 <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Action</TableHead>
-                    <TableHead>Employee</TableHead>
+                    <TableHead>User</TableHead>
                     <TableHead>Notes</TableHead>
                 </TableRow>
              </TableHeader>
@@ -129,7 +136,7 @@ export default async function AssetDetailPage(props: AssetDetailPageProps) {
                                     {t.action.replace("_", " ")}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{t.employee.firstName} {t.employee.lastName}</TableCell>
+                            <TableCell>{t.user.firstName} {t.user.lastName}</TableCell>
                             <TableCell>{t.notes || "-"}</TableCell>
                         </TableRow>
                     ))

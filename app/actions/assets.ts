@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { AssetStatus, Prisma } from "@/generated/client";
+import { auth } from "@/auth";
 
 const assetSchema = z.object({
   code: z.string().min(1, "Asset Code is required"),
@@ -22,6 +23,11 @@ export type AssetResult = {
 };
 
 export async function createAsset(data: z.infer<typeof assetSchema>) {
+  const session = await auth();
+  if (session?.user?.role !== "ADMIN") {
+    return { success: false, error: "Unauthorized" };
+  }
+
   const result = assetSchema.safeParse(data);
   if (!result.success) {
     return { success: false, error: result.error.issues[0]?.message || "Validation failed" };
@@ -61,8 +67,9 @@ export type GetAssetsParams = {
   page?: number;
   limit?: number;
   search?: string;
-  status?: AssetStatus;
+  status?: AssetStatus | AssetStatus[];
   typeId?: number;
+  holderId?: number; // Filter by current holder
 };
 
 export async function getAssets({
@@ -71,13 +78,20 @@ export async function getAssets({
   search,
   status,
   typeId,
+  holderId,
 }: GetAssetsParams) {
   try {
     const skip = (page - 1) * limit;
 
+    const statusFilter = status
+      ? Array.isArray(status)
+        ? { in: status }
+        : { equals: status }
+      : {};
+
     const where: Prisma.AssetWhereInput = {
       AND: [
-        status ? { status } : {},
+        status ? { status: statusFilter } : {},
         typeId ? { typeId } : {},
         search
           ? {
@@ -102,7 +116,7 @@ export async function getAssets({
             take: 1,
             orderBy: { date: "desc" },
             include: {
-              employee: true,
+              user: true,
             },
           },
         },
@@ -111,14 +125,27 @@ export async function getAssets({
       prisma.asset.count({ where }),
     ]);
 
+    let filteredAssets = assets;
+
+    // Filter by holderId if provided (In-memory filtering as Prisma doesn't support relation-based filtering on last item easily)
+    if (holderId) {
+      filteredAssets = assets.filter(asset => {
+        const lastTransaction = asset.transactions[0];
+        return lastTransaction && lastTransaction.action === "CHECK_OUT" && lastTransaction.user.id === Number(holderId);
+      });
+      // Note: Total count might be inaccurate here with pagination if strictly relying on database count, 
+      // but for strict "My Assets" list usually it's small enough or we accept the limitation.
+      // For better pagination, we would need a two-step query (Find IDs from transactions first).
+    }
+
     return {
       success: true,
-      data: assets,
+      data: filteredAssets,
       metadata: {
-        total,
+        total: holderId ? filteredAssets.length : total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil((holderId ? filteredAssets.length : total) / limit),
       },
     };
   } catch (error) {
@@ -135,7 +162,7 @@ export async function getAssetById(id: number) {
         type: true,
         transactions: {
           include: {
-            employee: true,
+            user: true,
           },
           orderBy: { date: "desc" },
         },

@@ -59,7 +59,7 @@ export async function getRecentActivity(limit = 5) {
       orderBy: { date: "desc" },
       include: {
         asset: true,
-        employee: true,
+        user: true,
       },
     });
 

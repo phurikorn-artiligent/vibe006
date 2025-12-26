@@ -16,16 +16,18 @@ model AssetType {
 }
 
 model Asset {
-  id           Int           @id @default(autoincrement())
-  code         String        @unique
-  name         String
-  serialNumber String?
-  status       AssetStatus   @default(AVAILABLE)
-  purchaseDate DateTime?
-  price        Decimal?
-  typeId       Int
-  type         AssetType     @relation(fields: [typeId], references: [id])
-  transactions Transaction[]
+  id            Int               @id @default(autoincrement())
+  code          String            @unique
+  name          String
+  serialNumber  String?
+  status        AssetStatus       @default(AVAILABLE)
+  purchaseDate  DateTime?
+  price         Decimal?
+  returnDate    DateTime? // For defining when the asset should be returned
+  typeId        Int
+  type          AssetType         @relation(fields: [typeId], references: [id])
+  transactions  Transaction[]
+  notifications NotificationLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -38,24 +40,55 @@ enum AssetStatus {
   RETIRED
 }
 
-model Employee {
-  id           Int           @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  email        String        @unique
-  department   String?
-  transactions Transaction[]
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  email           String    @unique
+  password        String // Hashed Password
+  role            Role      @default(EMPLOYEE)
+  department      String?
+  image           String?
+  fcmToken        String? // Firebase Cloud Messaging Token
+  fcmSubscribedAt DateTime? // When user subscribed to push notifications
+  fcmDeviceInfo   String? // Browser/Device info (user agent)
+
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  transactions  Transaction[]
+  notifications NotificationLog[]
+
+  @@map("users")
+}
+
+model NotificationLog {
+  id      Int      @id @default(autoincrement())
+  type    String // "EMAIL", "PUSH"
+  status  String // "SUCCESS", "FAILED"
+  message String?
+  sentAt  DateTime @default(now())
+
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id])
+  assetId Int
+  asset   Asset @relation(fields: [assetId], references: [id])
 }
 
 model Transaction {
-  id         Int               @id @default(autoincrement())
-  action     TransactionAction
-  date       DateTime          @default(now())
-  notes      String?
-  assetId    Int
-  asset      Asset             @relation(fields: [assetId], references: [id])
-  employeeId Int
-  employee   Employee          @relation(fields: [employeeId], references: [id])
+  id      Int               @id @default(autoincrement())
+  action  TransactionAction
+  date    DateTime          @default(now())
+  notes   String?
+  assetId Int
+  asset   Asset             @relation(fields: [assetId], references: [id])
+  userId  Int
+  user    User              @relation(fields: [userId], references: [id])
 }
 
 enum TransactionAction {

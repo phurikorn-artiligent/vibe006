@@ -34,35 +34,51 @@ import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { getEmployees } from "@/app/actions/employees";
+import { getUsers } from "@/app/actions/users";
 import { getAssets } from "@/app/actions/assets";
 import { checkOutAsset } from "@/app/actions/operations";
-import { AssetStatus, Employee } from "@/generated/client";
+import { AssetStatus, User } from "@/generated/client";
 
 const formSchema = z.object({
-  employeeId: z.number().min(1, "Employee is required"),
+  userId: z.number().min(1, "User is required"),
   assetId: z.number().min(1, "Asset is required"),
   date: z.date(),
+  returnDate: z.date(),
   notes: z.string().optional(),
 });
 
+
 type CheckOutFormData = z.infer<typeof formSchema>;
 
-export function CheckOutForm() {
+interface CheckOutFormProps {
+
+  currentUser: any; // Using any to avoid type gymnastics with NextAuth vs Prisma types for now, strictly we should map
+}
+
+export function CheckOutForm({ currentUser }: CheckOutFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [assets, setAssets] = useState<{ id: number; code: string; name: string }[]>([]);
   
-  const [openEmployee, setOpenEmployee] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
   const [openAsset, setOpenAsset] = useState(false);
+
+  // Determine if we should lock the user field
+  const isEmployee = currentUser?.role === "EMPLOYEE";
+  const defaultUserId = isEmployee ? Number(currentUser.id) : 0;
+
+  // Default return date to tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      employeeId: 0,
+      userId: defaultUserId,
       assetId: 0,
       date: new Date(),
+      returnDate: tomorrow,
       notes: "",
     },
   });
@@ -70,9 +86,9 @@ export function CheckOutForm() {
   useEffect(() => {
     async function fetchData() {
       // Fetch Employees
-      const empResult = await getEmployees();
-      if (empResult.success && empResult.data) {
-        setEmployees(empResult.data);
+      const userResult = await getUsers();
+      if (userResult.success && userResult.data) {
+        setUsers(userResult.data);
       }
 
       // Fetch Available Assets
@@ -106,14 +122,19 @@ export function CheckOutForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl glass-card p-6 rounded-xl border shadow-sm">
         
-        {/* Employee Selection */}
+        {/* User Selection */}
         <FormField
           control={form.control}
-          name="employeeId"
+          name="userId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Employee <span className="text-red-500">*</span></FormLabel>
-              <Popover open={openEmployee} onOpenChange={setOpenEmployee}>
+              <FormLabel>User <span className="text-red-500">*</span></FormLabel>
+              {isEmployee ? (
+                 <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted text-sm text-muted-foreground">
+                    {currentUser.name || currentUser.firstName} (You)
+                 </div>
+              ) : (
+                <Popover open={openUser} onOpenChange={setOpenUser}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -125,38 +146,38 @@ export function CheckOutForm() {
                       )}
                     >
                       {field.value
-                        ? employees.find((e) => e.id === field.value)
-                            ? `${employees.find((e) => e.id === field.value)?.firstName} ${employees.find((e) => e.id === field.value)?.lastName}`
-                            : "Select employee"
-                        : "Select employee"}
+                        ? users.find((u) => u.id === field.value)
+                            ? `${users.find((u) => u.id === field.value)?.firstName} ${users.find((u) => u.id === field.value)?.lastName}`
+                            : "Select user"
+                        : "Select user"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search employee..." />
+                    <CommandInput placeholder="Search user..." />
                     <CommandList>
-                      <CommandEmpty>No employee found.</CommandEmpty>
+                      <CommandEmpty>No user found.</CommandEmpty>
                       <CommandGroup>
-                        {employees.map((employee) => (
+                        {users.map((user) => (
                           <CommandItem
-                            value={`${employee.firstName} ${employee.lastName}`} // Searchable string
-                            key={employee.id}
+                            value={`${user.firstName} ${user.lastName}`} // Searchable string
+                            key={user.id}
                             onSelect={() => {
-                              form.setValue("employeeId", employee.id);
-                              setOpenEmployee(false);
+                              form.setValue("userId", user.id);
+                              setOpenUser(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                employee.id === field.value
+                                user.id === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {employee.firstName} {employee.lastName}
+                            {user.firstName} {user.lastName}
                           </CommandItem>
                         ))}
                       </CommandGroup>
@@ -164,6 +185,7 @@ export function CheckOutForm() {
                   </Command>
                 </PopoverContent>
               </Popover>
+              )}
               <FormMessage />
             </FormItem>
           )}
@@ -232,47 +254,91 @@ export function CheckOutForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Assignment Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+                <FormItem className="flex flex-col">
+                <FormLabel>Assignment Date</FormLabel>
+                <Popover>
+                    <PopoverTrigger asChild>
+                    <FormControl>
+                        <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                        )}
+                        >
+                        {field.value ? (
+                            format(field.value, "PPP")
+                        ) : (
+                            <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                    />
+                    </PopoverContent>
+                </Popover>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+
+            <FormField
+            control={form.control}
+            name="returnDate"
+            render={({ field }) => (
+                <FormItem className="flex flex-col">
+                <FormLabel>Return Date <span className="text-red-500">*</span></FormLabel>
+                <Popover>
+                    <PopoverTrigger asChild>
+                    <FormControl>
+                        <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                        )}
+                        >
+                        {field.value ? (
+                            format(field.value, "PPP")
+                        ) : (
+                            <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                        date < new Date(new Date().setHours(0,0,0,0)) // Cannot be in past
+                        }
+                        initialFocus
+                    />
+                    </PopoverContent>
+                </Popover>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
 
         <FormField
           control={form.control}

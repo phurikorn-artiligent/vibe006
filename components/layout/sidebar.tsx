@@ -9,7 +9,11 @@ import {
   ArrowRightLeft,
   Settings,
   CircleDashed,
+  LogOut,
+  Bell,
 } from "lucide-react";
+import { logout } from "@/app/actions/auth";
+import { NotificationPopover } from "@/components/notifications/notification-popover";
 
 const sidebarRoutes = [
   {
@@ -37,10 +41,29 @@ const sidebarRoutes = [
     icon: Settings,
     href: "/settings/asset-types",
   },
+  {
+    label: "Notifications",
+    icon: Bell,
+    href: "/admin/notifications",
+  },
 ];
 
-export function Sidebar() {
+import { Role } from "@/generated/client";
+
+interface SidebarProps {
+  role?: Role;
+}
+
+export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
+
+  const filteredRoutes = sidebarRoutes.filter(route => {
+    if (role === 'EMPLOYEE') {
+        // Employee cannot see Settings or Notifications
+        return route.label !== 'Settings' && route.label !== 'Notifications';
+    }
+    return true; 
+  });
 
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-slate-900 text-slate-100 border-r border-slate-800 shadow-xl">
@@ -58,7 +81,7 @@ export function Sidebar() {
         </Link>
         
         <div className="space-y-1">
-          {sidebarRoutes.map((route) => {
+          {filteredRoutes.map((route) => {
             const isActive = pathname === route.href || (route.href !== "/" && pathname.startsWith(route.href));
             
             return (
@@ -87,13 +110,25 @@ export function Sidebar() {
       
       <div className="px-3 py-2">
          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-slate-900">
-                    JD
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-slate-900">
+                        {role === 'ADMIN' ? 'AD' : 'US'}
+                    </div>
+                    <div className="flex flex-col">
+                        <p className="text-xs font-medium text-white">Current User</p>
+                        <p className="text-[10px] text-slate-400 capitalize">{role?.toLowerCase()}</p>
+                    </div>
                 </div>
-                <div className="flex flex-col">
-                    <p className="text-xs font-medium text-white">John Doe</p>
-                    <p className="text-[10px] text-slate-400">Admin</p>
+                <div className="flex items-center gap-1">
+                    <NotificationPopover />
+                    <button 
+                      onClick={() => logout()}
+                      className="p-2 rounded-lg hover:bg-red-500/10 hover:text-red-400 text-slate-400 transition-colors"
+                      title="Sign Out"
+                    >
+                      <LogOut className="h-4 w-4" />
+                    </button>
                 </div>
             </div>
          </div>

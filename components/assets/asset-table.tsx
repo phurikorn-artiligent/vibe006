@@ -8,14 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Asset, AssetType, AssetStatus, Transaction, Employee } from "@/generated/client";
+import { Asset, AssetType, AssetStatus, Transaction, User } from "@/generated/client";
 import { Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AssetWithRelations extends Asset {
   type: AssetType;
   transactions: (Transaction & {
-    employee: Employee;
+    user: User;
   })[];
 }
 
@@ -66,9 +66,9 @@ export function AssetTable({ assets }: AssetTableProps) {
                     ? (
                         <div className="flex items-center gap-2">
                              <div className="h-6 w-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">
-                                {asset.transactions[0].employee.firstName[0]}
+                                {asset.transactions[0].user.firstName[0]}
                              </div>
-                             <span className="text-sm">{asset.transactions[0].employee.firstName} {asset.transactions[0].employee.lastName}</span>
+                             <span className="text-sm">{asset.transactions[0].user.firstName} {asset.transactions[0].user.lastName}</span>
                         </div>
                       )
                     : <span className="text-slate-400">-</span>}

@@ -1,8 +1,27 @@
-import { PrismaClient } from '../generated/client'
+const bcrypt = require('bcryptjs')
+const { PrismaClient } = require('../generated/client')
 
 const prisma = new PrismaClient()
 
 async function main() {
+  const passwordHash = await bcrypt.hash('password123', 10)
+
+  // 1. Create Admin
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: { role: 'ADMIN', password: passwordHash },
+    create: {
+      firstName: 'Admin',
+      lastName: 'User',
+      email: 'admin@example.com',
+      password: passwordHash,
+      role: 'ADMIN',
+      department: 'IT',
+    },
+  })
+  console.log(`Created admin: ${admin.email}`)
+
+  // 2. Create Employees
   const employees = [
     { firstName: 'Potter', lastName: 'Harry', email: 'harry.potter@hogwarts.edu', department: 'Gryffindor' },
     { firstName: 'Granger', lastName: 'Hermione', email: 'hermione.granger@hogwarts.edu', department: 'Gryffindor' },
@@ -11,12 +30,16 @@ async function main() {
     { firstName: 'Snow', lastName: 'Jon', email: 'jon.snow@winterfell.net', department: 'Nights Watch' },
   ]
 
-  console.log(`Start seeding ...`)
+  console.log(`Start seeding employees...`)
   for (const emp of employees) {
-    const user = await prisma.employee.upsert({
+    const user = await prisma.user.upsert({
       where: { email: emp.email },
-      update: {},
-      create: emp,
+      update: { role: 'EMPLOYEE', password: passwordHash },
+      create: {
+        ...emp,
+        password: passwordHash,
+        role: 'EMPLOYEE',
+      },
     })
     console.log(`Created employee: ${user.firstName} ${user.lastName}`)
   }

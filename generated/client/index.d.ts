@@ -24,10 +24,15 @@ export type AssetType = $Result.DefaultSelection<Prisma.$AssetTypePayload>
  */
 export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
 /**
- * Model Employee
+ * Model User
  * 
  */
-export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
+export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model NotificationLog
+ * 
+ */
+export type NotificationLog = $Result.DefaultSelection<Prisma.$NotificationLogPayload>
 /**
  * Model Transaction
  * 
@@ -48,6 +53,14 @@ export namespace $Enums {
 export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
 
 
+export const Role: {
+  ADMIN: 'ADMIN',
+  EMPLOYEE: 'EMPLOYEE'
+};
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
 export const TransactionAction: {
   CHECK_OUT: 'CHECK_OUT',
   CHECK_IN: 'CHECK_IN'
@@ -60,6 +73,10 @@ export type TransactionAction = (typeof TransactionAction)[keyof typeof Transact
 export type AssetStatus = $Enums.AssetStatus
 
 export const AssetStatus: typeof $Enums.AssetStatus
+
+export type Role = $Enums.Role
+
+export const Role: typeof $Enums.Role
 
 export type TransactionAction = $Enums.TransactionAction
 
@@ -204,14 +221,24 @@ export class PrismaClient<
   get asset(): Prisma.AssetDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Employees
-    * const employees = await prisma.employee.findMany()
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get employee(): Prisma.EmployeeDelegate<ExtArgs, ClientOptions>;
+  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notificationLog`: Exposes CRUD operations for the **NotificationLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NotificationLogs
+    * const notificationLogs = await prisma.notificationLog.findMany()
+    * ```
+    */
+  get notificationLog(): Prisma.NotificationLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
@@ -665,7 +692,8 @@ export namespace Prisma {
   export const ModelName: {
     AssetType: 'AssetType',
     Asset: 'Asset',
-    Employee: 'Employee',
+    User: 'User',
+    NotificationLog: 'NotificationLog',
     Transaction: 'Transaction'
   };
 
@@ -685,7 +713,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "assetType" | "asset" | "employee" | "transaction"
+      modelProps: "assetType" | "asset" | "user" | "notificationLog" | "transaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -837,77 +865,151 @@ export namespace Prisma {
           }
         }
       }
-      Employee: {
-        payload: Prisma.$EmployeePayload<ExtArgs>
-        fields: Prisma.EmployeeFieldRefs
+      User: {
+        payload: Prisma.$UserPayload<ExtArgs>
+        fields: Prisma.UserFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.EmployeeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+            args: Prisma.UserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.EmployeeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findFirst: {
-            args: Prisma.EmployeeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+            args: Prisma.UserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.EmployeeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findMany: {
-            args: Prisma.EmployeeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+            args: Prisma.UserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           create: {
-            args: Prisma.EmployeeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           createMany: {
-            args: Prisma.EmployeeCreateManyArgs<ExtArgs>
+            args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.EmployeeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           delete: {
-            args: Prisma.EmployeeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           update: {
-            args: Prisma.EmployeeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           deleteMany: {
-            args: Prisma.EmployeeDeleteManyArgs<ExtArgs>
+            args: Prisma.UserDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.EmployeeUpdateManyArgs<ExtArgs>
+            args: Prisma.UserUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.EmployeeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           upsert: {
-            args: Prisma.EmployeeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+            args: Prisma.UserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           aggregate: {
-            args: Prisma.EmployeeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateEmployee>
+            args: Prisma.UserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser>
           }
           groupBy: {
-            args: Prisma.EmployeeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<EmployeeGroupByOutputType>[]
+            args: Prisma.UserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserGroupByOutputType>[]
           }
           count: {
-            args: Prisma.EmployeeCountArgs<ExtArgs>
-            result: $Utils.Optional<EmployeeCountAggregateOutputType> | number
+            args: Prisma.UserCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      NotificationLog: {
+        payload: Prisma.$NotificationLogPayload<ExtArgs>
+        fields: Prisma.NotificationLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          update: {
+            args: Prisma.NotificationLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationLogPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificationLog>
+          }
+          groupBy: {
+            args: Prisma.NotificationLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationLogCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationLogCountAggregateOutputType> | number
           }
         }
       }
@@ -1083,7 +1185,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     assetType?: AssetTypeOmit
     asset?: AssetOmit
-    employee?: EmployeeOmit
+    user?: UserOmit
+    notificationLog?: NotificationLogOmit
     transaction?: TransactionOmit
   }
 
@@ -1197,10 +1300,12 @@ export namespace Prisma {
 
   export type AssetCountOutputType = {
     transactions: number
+    notifications: number
   }
 
   export type AssetCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | AssetCountOutputTypeCountTransactionsArgs
+    notifications?: boolean | AssetCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1221,35 +1326,51 @@ export namespace Prisma {
     where?: TransactionWhereInput
   }
 
-
   /**
-   * Count Type EmployeeCountOutputType
+   * AssetCountOutputType without action
    */
-
-  export type EmployeeCountOutputType = {
-    transactions: number
+  export type AssetCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationLogWhereInput
   }
 
-  export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    transactions?: boolean | EmployeeCountOutputTypeCountTransactionsArgs
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    transactions: number
+    notifications: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the EmployeeCountOutputType
+     * Select specific fields to fetch from the UserCountOutputType
      */
-    select?: EmployeeCountOutputTypeSelect<ExtArgs> | null
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationLogWhereInput
   }
 
 
@@ -2367,6 +2488,7 @@ export namespace Prisma {
     status: $Enums.AssetStatus | null
     purchaseDate: Date | null
     price: Decimal | null
+    returnDate: Date | null
     typeId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2380,6 +2502,7 @@ export namespace Prisma {
     status: $Enums.AssetStatus | null
     purchaseDate: Date | null
     price: Decimal | null
+    returnDate: Date | null
     typeId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2393,6 +2516,7 @@ export namespace Prisma {
     status: number
     purchaseDate: number
     price: number
+    returnDate: number
     typeId: number
     createdAt: number
     updatedAt: number
@@ -2420,6 +2544,7 @@ export namespace Prisma {
     status?: true
     purchaseDate?: true
     price?: true
+    returnDate?: true
     typeId?: true
     createdAt?: true
     updatedAt?: true
@@ -2433,6 +2558,7 @@ export namespace Prisma {
     status?: true
     purchaseDate?: true
     price?: true
+    returnDate?: true
     typeId?: true
     createdAt?: true
     updatedAt?: true
@@ -2446,6 +2572,7 @@ export namespace Prisma {
     status?: true
     purchaseDate?: true
     price?: true
+    returnDate?: true
     typeId?: true
     createdAt?: true
     updatedAt?: true
@@ -2546,6 +2673,7 @@ export namespace Prisma {
     status: $Enums.AssetStatus
     purchaseDate: Date | null
     price: Decimal | null
+    returnDate: Date | null
     typeId: number
     createdAt: Date
     updatedAt: Date
@@ -2578,11 +2706,13 @@ export namespace Prisma {
     status?: boolean
     purchaseDate?: boolean
     price?: boolean
+    returnDate?: boolean
     typeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     type?: boolean | AssetTypeDefaultArgs<ExtArgs>
     transactions?: boolean | Asset$transactionsArgs<ExtArgs>
+    notifications?: boolean | Asset$notificationsArgs<ExtArgs>
     _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["asset"]>
 
@@ -2594,6 +2724,7 @@ export namespace Prisma {
     status?: boolean
     purchaseDate?: boolean
     price?: boolean
+    returnDate?: boolean
     typeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2608,6 +2739,7 @@ export namespace Prisma {
     status?: boolean
     purchaseDate?: boolean
     price?: boolean
+    returnDate?: boolean
     typeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2622,15 +2754,17 @@ export namespace Prisma {
     status?: boolean
     purchaseDate?: boolean
     price?: boolean
+    returnDate?: boolean
     typeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "serialNumber" | "status" | "purchaseDate" | "price" | "typeId" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "serialNumber" | "status" | "purchaseDate" | "price" | "returnDate" | "typeId" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
   export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     type?: boolean | AssetTypeDefaultArgs<ExtArgs>
     transactions?: boolean | Asset$transactionsArgs<ExtArgs>
+    notifications?: boolean | Asset$notificationsArgs<ExtArgs>
     _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AssetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2645,6 +2779,7 @@ export namespace Prisma {
     objects: {
       type: Prisma.$AssetTypePayload<ExtArgs>
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2654,6 +2789,7 @@ export namespace Prisma {
       status: $Enums.AssetStatus
       purchaseDate: Date | null
       price: Prisma.Decimal | null
+      returnDate: Date | null
       typeId: number
       createdAt: Date
       updatedAt: Date
@@ -3053,6 +3189,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     type<T extends AssetTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetTypeDefaultArgs<ExtArgs>>): Prisma__AssetTypeClient<$Result.GetResult<Prisma.$AssetTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     transactions<T extends Asset$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Asset$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends Asset$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Asset$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3089,6 +3226,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Asset", 'AssetStatus'>
     readonly purchaseDate: FieldRef<"Asset", 'DateTime'>
     readonly price: FieldRef<"Asset", 'Decimal'>
+    readonly returnDate: FieldRef<"Asset", 'DateTime'>
     readonly typeId: FieldRef<"Asset", 'Int'>
     readonly createdAt: FieldRef<"Asset", 'DateTime'>
     readonly updatedAt: FieldRef<"Asset", 'DateTime'>
@@ -3512,6 +3650,30 @@ export namespace Prisma {
   }
 
   /**
+   * Asset.notifications
+   */
+  export type Asset$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    where?: NotificationLogWhereInput
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    cursor?: NotificationLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationLogScalarFieldEnum | NotificationLogScalarFieldEnum[]
+  }
+
+  /**
    * Asset without action
    */
   export type AssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3531,380 +3693,479 @@ export namespace Prisma {
 
 
   /**
-   * Model Employee
+   * Model User
    */
 
-  export type AggregateEmployee = {
-    _count: EmployeeCountAggregateOutputType | null
-    _avg: EmployeeAvgAggregateOutputType | null
-    _sum: EmployeeSumAggregateOutputType | null
-    _min: EmployeeMinAggregateOutputType | null
-    _max: EmployeeMaxAggregateOutputType | null
+  export type AggregateUser = {
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  export type EmployeeAvgAggregateOutputType = {
+  export type UserAvgAggregateOutputType = {
     id: number | null
   }
 
-  export type EmployeeSumAggregateOutputType = {
+  export type UserSumAggregateOutputType = {
     id: number | null
   }
 
-  export type EmployeeMinAggregateOutputType = {
-    id: number | null
-    firstName: string | null
-    lastName: string | null
-    email: string | null
-    department: string | null
-  }
-
-  export type EmployeeMaxAggregateOutputType = {
+  export type UserMinAggregateOutputType = {
     id: number | null
     firstName: string | null
     lastName: string | null
     email: string | null
+    password: string | null
+    role: $Enums.Role | null
     department: string | null
+    image: string | null
+    fcmToken: string | null
+    fcmSubscribedAt: Date | null
+    fcmDeviceInfo: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
   }
 
-  export type EmployeeCountAggregateOutputType = {
+  export type UserMaxAggregateOutputType = {
+    id: number | null
+    firstName: string | null
+    lastName: string | null
+    email: string | null
+    password: string | null
+    role: $Enums.Role | null
+    department: string | null
+    image: string | null
+    fcmToken: string | null
+    fcmSubscribedAt: Date | null
+    fcmDeviceInfo: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
+  }
+
+  export type UserCountAggregateOutputType = {
     id: number
     firstName: number
     lastName: number
     email: number
+    password: number
+    role: number
     department: number
+    image: number
+    fcmToken: number
+    fcmSubscribedAt: number
+    fcmDeviceInfo: number
+    resetToken: number
+    resetTokenExpiry: number
     _all: number
   }
 
 
-  export type EmployeeAvgAggregateInputType = {
+  export type UserAvgAggregateInputType = {
     id?: true
   }
 
-  export type EmployeeSumAggregateInputType = {
+  export type UserSumAggregateInputType = {
     id?: true
   }
 
-  export type EmployeeMinAggregateInputType = {
+  export type UserMinAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
     email?: true
+    password?: true
+    role?: true
     department?: true
+    image?: true
+    fcmToken?: true
+    fcmSubscribedAt?: true
+    fcmDeviceInfo?: true
+    resetToken?: true
+    resetTokenExpiry?: true
   }
 
-  export type EmployeeMaxAggregateInputType = {
+  export type UserMaxAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
     email?: true
+    password?: true
+    role?: true
     department?: true
+    image?: true
+    fcmToken?: true
+    fcmSubscribedAt?: true
+    fcmDeviceInfo?: true
+    resetToken?: true
+    resetTokenExpiry?: true
   }
 
-  export type EmployeeCountAggregateInputType = {
+  export type UserCountAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
     email?: true
+    password?: true
+    role?: true
     department?: true
+    image?: true
+    fcmToken?: true
+    fcmSubscribedAt?: true
+    fcmDeviceInfo?: true
+    resetToken?: true
+    resetTokenExpiry?: true
     _all?: true
   }
 
-  export type EmployeeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Employee to aggregate.
+     * Filter which User to aggregate.
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Employees to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: EmployeeWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Employees from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Employees.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Employees
+     * Count returned Users
     **/
-    _count?: true | EmployeeCountAggregateInputType
+    _count?: true | UserCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: EmployeeAvgAggregateInputType
+    _avg?: UserAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: EmployeeSumAggregateInputType
+    _sum?: UserSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: EmployeeMinAggregateInputType
+    _min?: UserMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: EmployeeMaxAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type GetEmployeeAggregateType<T extends EmployeeAggregateArgs> = {
-        [P in keyof T & keyof AggregateEmployee]: P extends '_count' | 'count'
+  export type GetUserAggregateType<T extends UserAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateEmployee[P]>
-      : GetScalarType<T[P], AggregateEmployee[P]>
+        : GetScalarType<T[P], AggregateUser[P]>
+      : GetScalarType<T[P], AggregateUser[P]>
   }
 
 
 
 
-  export type EmployeeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EmployeeWhereInput
-    orderBy?: EmployeeOrderByWithAggregationInput | EmployeeOrderByWithAggregationInput[]
-    by: EmployeeScalarFieldEnum[] | EmployeeScalarFieldEnum
-    having?: EmployeeScalarWhereWithAggregatesInput
+  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
+    by: UserScalarFieldEnum[] | UserScalarFieldEnum
+    having?: UserScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: EmployeeCountAggregateInputType | true
-    _avg?: EmployeeAvgAggregateInputType
-    _sum?: EmployeeSumAggregateInputType
-    _min?: EmployeeMinAggregateInputType
-    _max?: EmployeeMaxAggregateInputType
+    _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
+    _min?: UserMinAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type EmployeeGroupByOutputType = {
+  export type UserGroupByOutputType = {
     id: number
     firstName: string
     lastName: string
     email: string
+    password: string
+    role: $Enums.Role
     department: string | null
-    _count: EmployeeCountAggregateOutputType | null
-    _avg: EmployeeAvgAggregateOutputType | null
-    _sum: EmployeeSumAggregateOutputType | null
-    _min: EmployeeMinAggregateOutputType | null
-    _max: EmployeeMaxAggregateOutputType | null
+    image: string | null
+    fcmToken: string | null
+    fcmSubscribedAt: Date | null
+    fcmDeviceInfo: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  type GetEmployeeGroupByPayload<T extends EmployeeGroupByArgs> = Prisma.PrismaPromise<
+  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<EmployeeGroupByOutputType, T['by']> &
+      PickEnumerable<UserGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof EmployeeGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
-            : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
+              : GetScalarType<T[P], UserGroupByOutputType[P]>
+            : GetScalarType<T[P], UserGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type EmployeeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstName?: boolean
     lastName?: boolean
     email?: boolean
+    password?: boolean
+    role?: boolean
     department?: boolean
-    transactions?: boolean | Employee$transactionsArgs<ExtArgs>
-    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["employee"]>
+    image?: boolean
+    fcmToken?: boolean
+    fcmSubscribedAt?: boolean
+    fcmDeviceInfo?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
-  export type EmployeeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstName?: boolean
     lastName?: boolean
     email?: boolean
+    password?: boolean
+    role?: boolean
     department?: boolean
-  }, ExtArgs["result"]["employee"]>
+    image?: boolean
+    fcmToken?: boolean
+    fcmSubscribedAt?: boolean
+    fcmDeviceInfo?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
+  }, ExtArgs["result"]["user"]>
 
-  export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstName?: boolean
     lastName?: boolean
     email?: boolean
+    password?: boolean
+    role?: boolean
     department?: boolean
-  }, ExtArgs["result"]["employee"]>
+    image?: boolean
+    fcmToken?: boolean
+    fcmSubscribedAt?: boolean
+    fcmDeviceInfo?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
+  }, ExtArgs["result"]["user"]>
 
-  export type EmployeeSelectScalar = {
+  export type UserSelectScalar = {
     id?: boolean
     firstName?: boolean
     lastName?: boolean
     email?: boolean
+    password?: boolean
+    role?: boolean
     department?: boolean
+    image?: boolean
+    fcmToken?: boolean
+    fcmSubscribedAt?: boolean
+    fcmDeviceInfo?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "department", ExtArgs["result"]["employee"]>
-  export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    transactions?: boolean | Employee$transactionsArgs<ExtArgs>
-    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "password" | "role" | "department" | "image" | "fcmToken" | "fcmSubscribedAt" | "fcmDeviceInfo" | "resetToken" | "resetTokenExpiry", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type EmployeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Employee"
+  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User"
     objects: {
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       firstName: string
       lastName: string
       email: string
+      password: string
+      role: $Enums.Role
       department: string | null
-    }, ExtArgs["result"]["employee"]>
+      image: string | null
+      fcmToken: string | null
+      fcmSubscribedAt: Date | null
+      fcmDeviceInfo: string | null
+      resetToken: string | null
+      resetTokenExpiry: Date | null
+    }, ExtArgs["result"]["user"]>
     composites: {}
   }
 
-  type EmployeeGetPayload<S extends boolean | null | undefined | EmployeeDefaultArgs> = $Result.GetResult<Prisma.$EmployeePayload, S>
+  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
-  type EmployeeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<EmployeeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: EmployeeCountAggregateInputType | true
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCountAggregateInputType | true
     }
 
-  export interface EmployeeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Employee'], meta: { name: 'Employee' } }
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
-     * Find zero or one Employee that matches the filter.
-     * @param {EmployeeFindUniqueArgs} args - Arguments to find a Employee
+     * Find zero or one User that matches the filter.
+     * @param {UserFindUniqueArgs} args - Arguments to find a User
      * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findUnique({
+     * // Get one User
+     * const user = await prisma.user.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends EmployeeFindUniqueArgs>(args: SelectSubset<T, EmployeeFindUniqueArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Employee that matches the filter or throw an error with `error.code='P2025'`
+     * Find one User that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {EmployeeFindUniqueOrThrowArgs} args - Arguments to find a Employee
+     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findUniqueOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends EmployeeFindUniqueOrThrowArgs>(args: SelectSubset<T, EmployeeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Employee that matches the filter.
+     * Find the first User that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindFirstArgs} args - Arguments to find a Employee
+     * @param {UserFindFirstArgs} args - Arguments to find a User
      * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findFirst({
+     * // Get one User
+     * const user = await prisma.user.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends EmployeeFindFirstArgs>(args?: SelectSubset<T, EmployeeFindFirstArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Employee that matches the filter or
+     * Find the first User that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindFirstOrThrowArgs} args - Arguments to find a Employee
+     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findFirstOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends EmployeeFindFirstOrThrowArgs>(args?: SelectSubset<T, EmployeeFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Employees that matches the filter.
+     * Find zero or more Users that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Employees
-     * const employees = await prisma.employee.findMany()
+     * // Get all Users
+     * const users = await prisma.user.findMany()
      * 
-     * // Get first 10 Employees
-     * const employees = await prisma.employee.findMany({ take: 10 })
+     * // Get first 10 Users
+     * const users = await prisma.user.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const employeeWithIdOnly = await prisma.employee.findMany({ select: { id: true } })
+     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends EmployeeFindManyArgs>(args?: SelectSubset<T, EmployeeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Employee.
-     * @param {EmployeeCreateArgs} args - Arguments to create a Employee.
+     * Create a User.
+     * @param {UserCreateArgs} args - Arguments to create a User.
      * @example
-     * // Create one Employee
-     * const Employee = await prisma.employee.create({
+     * // Create one User
+     * const User = await prisma.user.create({
      *   data: {
-     *     // ... data to create a Employee
+     *     // ... data to create a User
      *   }
      * })
      * 
      */
-    create<T extends EmployeeCreateArgs>(args: SelectSubset<T, EmployeeCreateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Employees.
-     * @param {EmployeeCreateManyArgs} args - Arguments to create many Employees.
+     * Create many Users.
+     * @param {UserCreateManyArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Employees
-     * const employee = await prisma.employee.createMany({
+     * // Create many Users
+     * const user = await prisma.user.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends EmployeeCreateManyArgs>(args?: SelectSubset<T, EmployeeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Employees and returns the data saved in the database.
-     * @param {EmployeeCreateManyAndReturnArgs} args - Arguments to create many Employees.
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Employees
-     * const employee = await prisma.employee.createManyAndReturn({
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Employees and only return the `id`
-     * const employeeWithIdOnly = await prisma.employee.createManyAndReturn({
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3914,28 +4175,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends EmployeeCreateManyAndReturnArgs>(args?: SelectSubset<T, EmployeeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Employee.
-     * @param {EmployeeDeleteArgs} args - Arguments to delete one Employee.
+     * Delete a User.
+     * @param {UserDeleteArgs} args - Arguments to delete one User.
      * @example
-     * // Delete one Employee
-     * const Employee = await prisma.employee.delete({
+     * // Delete one User
+     * const User = await prisma.user.delete({
      *   where: {
-     *     // ... filter to delete one Employee
+     *     // ... filter to delete one User
      *   }
      * })
      * 
      */
-    delete<T extends EmployeeDeleteArgs>(args: SelectSubset<T, EmployeeDeleteArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Employee.
-     * @param {EmployeeUpdateArgs} args - Arguments to update one Employee.
+     * Update one User.
+     * @param {UserUpdateArgs} args - Arguments to update one User.
      * @example
-     * // Update one Employee
-     * const employee = await prisma.employee.update({
+     * // Update one User
+     * const user = await prisma.user.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3945,30 +4206,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends EmployeeUpdateArgs>(args: SelectSubset<T, EmployeeUpdateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Employees.
-     * @param {EmployeeDeleteManyArgs} args - Arguments to filter Employees to delete.
+     * Delete zero or more Users.
+     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
      * @example
-     * // Delete a few Employees
-     * const { count } = await prisma.employee.deleteMany({
+     * // Delete a few Users
+     * const { count } = await prisma.user.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends EmployeeDeleteManyArgs>(args?: SelectSubset<T, EmployeeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Employees.
+     * Update zero or more Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Employees
-     * const employee = await prisma.employee.updateMany({
+     * // Update many Users
+     * const user = await prisma.user.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3978,14 +4239,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends EmployeeUpdateManyArgs>(args: SelectSubset<T, EmployeeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Employees and returns the data updated in the database.
-     * @param {EmployeeUpdateManyAndReturnArgs} args - Arguments to update many Employees.
+     * Update zero or more Users and returns the data updated in the database.
+     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
      * @example
-     * // Update many Employees
-     * const employee = await prisma.employee.updateManyAndReturn({
+     * // Update many Users
+     * const user = await prisma.user.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3994,8 +4255,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Employees and only return the `id`
-     * const employeeWithIdOnly = await prisma.employee.updateManyAndReturn({
+     * // Update zero or more Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -4008,56 +4269,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends EmployeeUpdateManyAndReturnArgs>(args: SelectSubset<T, EmployeeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Employee.
-     * @param {EmployeeUpsertArgs} args - Arguments to update or create a Employee.
+     * Create or update one User.
+     * @param {UserUpsertArgs} args - Arguments to update or create a User.
      * @example
-     * // Update or create a Employee
-     * const employee = await prisma.employee.upsert({
+     * // Update or create a User
+     * const user = await prisma.user.upsert({
      *   create: {
-     *     // ... data to create a Employee
+     *     // ... data to create a User
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Employee we want to update
+     *     // ... the filter for the User we want to update
      *   }
      * })
      */
-    upsert<T extends EmployeeUpsertArgs>(args: SelectSubset<T, EmployeeUpsertArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Employees.
+     * Count the number of Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeCountArgs} args - Arguments to filter Employees to count.
+     * @param {UserCountArgs} args - Arguments to filter Users to count.
      * @example
-     * // Count the number of Employees
-     * const count = await prisma.employee.count({
+     * // Count the number of Users
+     * const count = await prisma.user.count({
      *   where: {
-     *     // ... the filter for the Employees we want to count
+     *     // ... the filter for the Users we want to count
      *   }
      * })
     **/
-    count<T extends EmployeeCountArgs>(
-      args?: Subset<T, EmployeeCountArgs>,
+    count<T extends UserCountArgs>(
+      args?: Subset<T, UserCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], EmployeeCountAggregateOutputType>
+          : GetScalarType<T['select'], UserCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Employee.
+     * Allows you to perform aggregations operations on a User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -4077,13 +4338,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends EmployeeAggregateArgs>(args: Subset<T, EmployeeAggregateArgs>): Prisma.PrismaPromise<GetEmployeeAggregateType<T>>
+    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
 
     /**
-     * Group by Employee.
+     * Group by User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeGroupByArgs} args - Group by arguments.
+     * @param {UserGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -4098,14 +4359,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends EmployeeGroupByArgs,
+      T extends UserGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: EmployeeGroupByArgs['orderBy'] }
-        : { orderBy?: EmployeeGroupByArgs['orderBy'] },
+        ? { orderBy: UserGroupByArgs['orderBy'] }
+        : { orderBy?: UserGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -4154,22 +4415,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, EmployeeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmployeeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Employee model
+   * Fields of the User model
    */
-  readonly fields: EmployeeFieldRefs;
+  readonly fields: UserFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Employee.
+   * The delegate class that acts as a "Promise-like" for User.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    transactions<T extends Employee$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4196,405 +4458,413 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Employee model
+   * Fields of the User model
    */
-  interface EmployeeFieldRefs {
-    readonly id: FieldRef<"Employee", 'Int'>
-    readonly firstName: FieldRef<"Employee", 'String'>
-    readonly lastName: FieldRef<"Employee", 'String'>
-    readonly email: FieldRef<"Employee", 'String'>
-    readonly department: FieldRef<"Employee", 'String'>
+  interface UserFieldRefs {
+    readonly id: FieldRef<"User", 'Int'>
+    readonly firstName: FieldRef<"User", 'String'>
+    readonly lastName: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'Role'>
+    readonly department: FieldRef<"User", 'String'>
+    readonly image: FieldRef<"User", 'String'>
+    readonly fcmToken: FieldRef<"User", 'String'>
+    readonly fcmSubscribedAt: FieldRef<"User", 'DateTime'>
+    readonly fcmDeviceInfo: FieldRef<"User", 'String'>
+    readonly resetToken: FieldRef<"User", 'String'>
+    readonly resetTokenExpiry: FieldRef<"User", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Employee findUnique
+   * User findUnique
    */
-  export type EmployeeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Employee to fetch.
+     * Filter, which User to fetch.
      */
-    where: EmployeeWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Employee findUniqueOrThrow
+   * User findUniqueOrThrow
    */
-  export type EmployeeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Employee to fetch.
+     * Filter, which User to fetch.
      */
-    where: EmployeeWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Employee findFirst
+   * User findFirst
    */
-  export type EmployeeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Employee to fetch.
+     * Filter, which User to fetch.
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Employees to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Employees.
+     * Sets the position for searching for Users.
      */
-    cursor?: EmployeeWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Employees from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Employees.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Employees.
+     * Filter by unique combinations of Users.
      */
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Employee findFirstOrThrow
+   * User findFirstOrThrow
    */
-  export type EmployeeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Employee to fetch.
+     * Filter, which User to fetch.
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Employees to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Employees.
+     * Sets the position for searching for Users.
      */
-    cursor?: EmployeeWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Employees from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Employees.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Employees.
+     * Filter by unique combinations of Users.
      */
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Employee findMany
+   * User findMany
    */
-  export type EmployeeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Employees to fetch.
+     * Filter, which Users to fetch.
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Employees to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Employees.
+     * Sets the position for listing Users.
      */
-    cursor?: EmployeeWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Employees from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Employees.
+     * Skip the first `n` Users.
      */
     skip?: number
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Employee create
+   * User create
    */
-  export type EmployeeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to create a Employee.
+     * The data needed to create a User.
      */
-    data: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
   }
 
   /**
-   * Employee createMany
+   * User createMany
    */
-  export type EmployeeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Employees.
+     * The data used to create many Users.
      */
-    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Employee createManyAndReturn
+   * User createManyAndReturn
    */
-  export type EmployeeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelectCreateManyAndReturn<ExtArgs> | null
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to create many Employees.
+     * The data used to create many Users.
      */
-    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Employee update
+   * User update
    */
-  export type EmployeeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to update a Employee.
+     * The data needed to update a User.
      */
-    data: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
+    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
     /**
-     * Choose, which Employee to update.
+     * Choose, which User to update.
      */
-    where: EmployeeWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Employee updateMany
+   * User updateMany
    */
-  export type EmployeeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Employees.
+     * The data used to update Users.
      */
-    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Employees to update
+     * Filter which Users to update
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Employees to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Employee updateManyAndReturn
+   * User updateManyAndReturn
    */
-  export type EmployeeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to update Employees.
+     * The data used to update Users.
      */
-    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Employees to update
+     * Filter which Users to update
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Employees to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Employee upsert
+   * User upsert
    */
-  export type EmployeeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The filter to search for the Employee to update in case it exists.
+     * The filter to search for the User to update in case it exists.
      */
-    where: EmployeeWhereUniqueInput
+    where: UserWhereUniqueInput
     /**
-     * In case the Employee found by the `where` argument doesn't exist, create a new Employee with this data.
+     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
      */
-    create: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+    create: XOR<UserCreateInput, UserUncheckedCreateInput>
     /**
-     * In case the Employee was found with the provided `where` argument, update it with this data.
+     * In case the User was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
+    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
   }
 
   /**
-   * Employee delete
+   * User delete
    */
-  export type EmployeeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the User
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the User
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter which Employee to delete.
+     * Filter which User to delete.
      */
-    where: EmployeeWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Employee deleteMany
+   * User deleteMany
    */
-  export type EmployeeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Employees to delete
+     * Filter which Users to delete
      */
-    where?: EmployeeWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Employees to delete.
+     * Limit how many Users to delete.
      */
     limit?: number
   }
 
   /**
-   * Employee.transactions
+   * User.transactions
    */
-  export type Employee$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Transaction
      */
@@ -4616,21 +4886,1179 @@ export namespace Prisma {
   }
 
   /**
-   * Employee without action
+   * User.notifications
    */
-  export type EmployeeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the NotificationLog
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: NotificationLogSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the NotificationLog
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: NotificationLogOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: NotificationLogInclude<ExtArgs> | null
+    where?: NotificationLogWhereInput
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    cursor?: NotificationLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationLogScalarFieldEnum | NotificationLogScalarFieldEnum[]
+  }
+
+  /**
+   * User without action
+   */
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NotificationLog
+   */
+
+  export type AggregateNotificationLog = {
+    _count: NotificationLogCountAggregateOutputType | null
+    _avg: NotificationLogAvgAggregateOutputType | null
+    _sum: NotificationLogSumAggregateOutputType | null
+    _min: NotificationLogMinAggregateOutputType | null
+    _max: NotificationLogMaxAggregateOutputType | null
+  }
+
+  export type NotificationLogAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    assetId: number | null
+  }
+
+  export type NotificationLogSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    assetId: number | null
+  }
+
+  export type NotificationLogMinAggregateOutputType = {
+    id: number | null
+    type: string | null
+    status: string | null
+    message: string | null
+    sentAt: Date | null
+    userId: number | null
+    assetId: number | null
+  }
+
+  export type NotificationLogMaxAggregateOutputType = {
+    id: number | null
+    type: string | null
+    status: string | null
+    message: string | null
+    sentAt: Date | null
+    userId: number | null
+    assetId: number | null
+  }
+
+  export type NotificationLogCountAggregateOutputType = {
+    id: number
+    type: number
+    status: number
+    message: number
+    sentAt: number
+    userId: number
+    assetId: number
+    _all: number
+  }
+
+
+  export type NotificationLogAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    assetId?: true
+  }
+
+  export type NotificationLogSumAggregateInputType = {
+    id?: true
+    userId?: true
+    assetId?: true
+  }
+
+  export type NotificationLogMinAggregateInputType = {
+    id?: true
+    type?: true
+    status?: true
+    message?: true
+    sentAt?: true
+    userId?: true
+    assetId?: true
+  }
+
+  export type NotificationLogMaxAggregateInputType = {
+    id?: true
+    type?: true
+    status?: true
+    message?: true
+    sentAt?: true
+    userId?: true
+    assetId?: true
+  }
+
+  export type NotificationLogCountAggregateInputType = {
+    id?: true
+    type?: true
+    status?: true
+    message?: true
+    sentAt?: true
+    userId?: true
+    assetId?: true
+    _all?: true
+  }
+
+  export type NotificationLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationLog to aggregate.
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationLogs to fetch.
+     */
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NotificationLogs
+    **/
+    _count?: true | NotificationLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NotificationLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NotificationLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationLogMaxAggregateInputType
+  }
+
+  export type GetNotificationLogAggregateType<T extends NotificationLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificationLog[P]>
+      : GetScalarType<T[P], AggregateNotificationLog[P]>
+  }
+
+
+
+
+  export type NotificationLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationLogWhereInput
+    orderBy?: NotificationLogOrderByWithAggregationInput | NotificationLogOrderByWithAggregationInput[]
+    by: NotificationLogScalarFieldEnum[] | NotificationLogScalarFieldEnum
+    having?: NotificationLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationLogCountAggregateInputType | true
+    _avg?: NotificationLogAvgAggregateInputType
+    _sum?: NotificationLogSumAggregateInputType
+    _min?: NotificationLogMinAggregateInputType
+    _max?: NotificationLogMaxAggregateInputType
+  }
+
+  export type NotificationLogGroupByOutputType = {
+    id: number
+    type: string
+    status: string
+    message: string | null
+    sentAt: Date
+    userId: number
+    assetId: number
+    _count: NotificationLogCountAggregateOutputType | null
+    _avg: NotificationLogAvgAggregateOutputType | null
+    _sum: NotificationLogSumAggregateOutputType | null
+    _min: NotificationLogMinAggregateOutputType | null
+    _max: NotificationLogMaxAggregateOutputType | null
+  }
+
+  type GetNotificationLogGroupByPayload<T extends NotificationLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationLogGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    status?: boolean
+    message?: boolean
+    sentAt?: boolean
+    userId?: boolean
+    assetId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationLog"]>
+
+  export type NotificationLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    status?: boolean
+    message?: boolean
+    sentAt?: boolean
+    userId?: boolean
+    assetId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationLog"]>
+
+  export type NotificationLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    status?: boolean
+    message?: boolean
+    sentAt?: boolean
+    userId?: boolean
+    assetId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationLog"]>
+
+  export type NotificationLogSelectScalar = {
+    id?: boolean
+    type?: boolean
+    status?: boolean
+    message?: boolean
+    sentAt?: boolean
+    userId?: boolean
+    assetId?: boolean
+  }
+
+  export type NotificationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "status" | "message" | "sentAt" | "userId" | "assetId", ExtArgs["result"]["notificationLog"]>
+  export type NotificationLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }
+  export type NotificationLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }
+  export type NotificationLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NotificationLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      asset: Prisma.$AssetPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      type: string
+      status: string
+      message: string | null
+      sentAt: Date
+      userId: number
+      assetId: number
+    }, ExtArgs["result"]["notificationLog"]>
+    composites: {}
+  }
+
+  type NotificationLogGetPayload<S extends boolean | null | undefined | NotificationLogDefaultArgs> = $Result.GetResult<Prisma.$NotificationLogPayload, S>
+
+  type NotificationLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationLogCountAggregateInputType | true
+    }
+
+  export interface NotificationLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NotificationLog'], meta: { name: 'NotificationLog' } }
+    /**
+     * Find zero or one NotificationLog that matches the filter.
+     * @param {NotificationLogFindUniqueArgs} args - Arguments to find a NotificationLog
+     * @example
+     * // Get one NotificationLog
+     * const notificationLog = await prisma.notificationLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationLogFindUniqueArgs>(args: SelectSubset<T, NotificationLogFindUniqueArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NotificationLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationLogFindUniqueOrThrowArgs} args - Arguments to find a NotificationLog
+     * @example
+     * // Get one NotificationLog
+     * const notificationLog = await prisma.notificationLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationLogFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogFindFirstArgs} args - Arguments to find a NotificationLog
+     * @example
+     * // Get one NotificationLog
+     * const notificationLog = await prisma.notificationLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationLogFindFirstArgs>(args?: SelectSubset<T, NotificationLogFindFirstArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogFindFirstOrThrowArgs} args - Arguments to find a NotificationLog
+     * @example
+     * // Get one NotificationLog
+     * const notificationLog = await prisma.notificationLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationLogFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NotificationLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NotificationLogs
+     * const notificationLogs = await prisma.notificationLog.findMany()
+     * 
+     * // Get first 10 NotificationLogs
+     * const notificationLogs = await prisma.notificationLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationLogWithIdOnly = await prisma.notificationLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationLogFindManyArgs>(args?: SelectSubset<T, NotificationLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NotificationLog.
+     * @param {NotificationLogCreateArgs} args - Arguments to create a NotificationLog.
+     * @example
+     * // Create one NotificationLog
+     * const NotificationLog = await prisma.notificationLog.create({
+     *   data: {
+     *     // ... data to create a NotificationLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationLogCreateArgs>(args: SelectSubset<T, NotificationLogCreateArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NotificationLogs.
+     * @param {NotificationLogCreateManyArgs} args - Arguments to create many NotificationLogs.
+     * @example
+     * // Create many NotificationLogs
+     * const notificationLog = await prisma.notificationLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationLogCreateManyArgs>(args?: SelectSubset<T, NotificationLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NotificationLogs and returns the data saved in the database.
+     * @param {NotificationLogCreateManyAndReturnArgs} args - Arguments to create many NotificationLogs.
+     * @example
+     * // Create many NotificationLogs
+     * const notificationLog = await prisma.notificationLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NotificationLogs and only return the `id`
+     * const notificationLogWithIdOnly = await prisma.notificationLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationLogCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NotificationLog.
+     * @param {NotificationLogDeleteArgs} args - Arguments to delete one NotificationLog.
+     * @example
+     * // Delete one NotificationLog
+     * const NotificationLog = await prisma.notificationLog.delete({
+     *   where: {
+     *     // ... filter to delete one NotificationLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationLogDeleteArgs>(args: SelectSubset<T, NotificationLogDeleteArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NotificationLog.
+     * @param {NotificationLogUpdateArgs} args - Arguments to update one NotificationLog.
+     * @example
+     * // Update one NotificationLog
+     * const notificationLog = await prisma.notificationLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationLogUpdateArgs>(args: SelectSubset<T, NotificationLogUpdateArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NotificationLogs.
+     * @param {NotificationLogDeleteManyArgs} args - Arguments to filter NotificationLogs to delete.
+     * @example
+     * // Delete a few NotificationLogs
+     * const { count } = await prisma.notificationLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationLogDeleteManyArgs>(args?: SelectSubset<T, NotificationLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NotificationLogs
+     * const notificationLog = await prisma.notificationLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationLogUpdateManyArgs>(args: SelectSubset<T, NotificationLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationLogs and returns the data updated in the database.
+     * @param {NotificationLogUpdateManyAndReturnArgs} args - Arguments to update many NotificationLogs.
+     * @example
+     * // Update many NotificationLogs
+     * const notificationLog = await prisma.notificationLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NotificationLogs and only return the `id`
+     * const notificationLogWithIdOnly = await prisma.notificationLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationLogUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NotificationLog.
+     * @param {NotificationLogUpsertArgs} args - Arguments to update or create a NotificationLog.
+     * @example
+     * // Update or create a NotificationLog
+     * const notificationLog = await prisma.notificationLog.upsert({
+     *   create: {
+     *     // ... data to create a NotificationLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NotificationLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationLogUpsertArgs>(args: SelectSubset<T, NotificationLogUpsertArgs<ExtArgs>>): Prisma__NotificationLogClient<$Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NotificationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogCountArgs} args - Arguments to filter NotificationLogs to count.
+     * @example
+     * // Count the number of NotificationLogs
+     * const count = await prisma.notificationLog.count({
+     *   where: {
+     *     // ... the filter for the NotificationLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationLogCountArgs>(
+      args?: Subset<T, NotificationLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NotificationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationLogAggregateArgs>(args: Subset<T, NotificationLogAggregateArgs>): Prisma.PrismaPromise<GetNotificationLogAggregateType<T>>
+
+    /**
+     * Group by NotificationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationLogGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NotificationLog model
+   */
+  readonly fields: NotificationLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NotificationLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NotificationLog model
+   */
+  interface NotificationLogFieldRefs {
+    readonly id: FieldRef<"NotificationLog", 'Int'>
+    readonly type: FieldRef<"NotificationLog", 'String'>
+    readonly status: FieldRef<"NotificationLog", 'String'>
+    readonly message: FieldRef<"NotificationLog", 'String'>
+    readonly sentAt: FieldRef<"NotificationLog", 'DateTime'>
+    readonly userId: FieldRef<"NotificationLog", 'Int'>
+    readonly assetId: FieldRef<"NotificationLog", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NotificationLog findUnique
+   */
+  export type NotificationLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationLog to fetch.
+     */
+    where: NotificationLogWhereUniqueInput
+  }
+
+  /**
+   * NotificationLog findUniqueOrThrow
+   */
+  export type NotificationLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationLog to fetch.
+     */
+    where: NotificationLogWhereUniqueInput
+  }
+
+  /**
+   * NotificationLog findFirst
+   */
+  export type NotificationLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationLog to fetch.
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationLogs to fetch.
+     */
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationLogs.
+     */
+    cursor?: NotificationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationLogs.
+     */
+    distinct?: NotificationLogScalarFieldEnum | NotificationLogScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationLog findFirstOrThrow
+   */
+  export type NotificationLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationLog to fetch.
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationLogs to fetch.
+     */
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationLogs.
+     */
+    cursor?: NotificationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationLogs.
+     */
+    distinct?: NotificationLogScalarFieldEnum | NotificationLogScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationLog findMany
+   */
+  export type NotificationLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationLogs to fetch.
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationLogs to fetch.
+     */
+    orderBy?: NotificationLogOrderByWithRelationInput | NotificationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NotificationLogs.
+     */
+    cursor?: NotificationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationLogs.
+     */
+    skip?: number
+    distinct?: NotificationLogScalarFieldEnum | NotificationLogScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationLog create
+   */
+  export type NotificationLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NotificationLog.
+     */
+    data: XOR<NotificationLogCreateInput, NotificationLogUncheckedCreateInput>
+  }
+
+  /**
+   * NotificationLog createMany
+   */
+  export type NotificationLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NotificationLogs.
+     */
+    data: NotificationLogCreateManyInput | NotificationLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationLog createManyAndReturn
+   */
+  export type NotificationLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many NotificationLogs.
+     */
+    data: NotificationLogCreateManyInput | NotificationLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NotificationLog update
+   */
+  export type NotificationLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NotificationLog.
+     */
+    data: XOR<NotificationLogUpdateInput, NotificationLogUncheckedUpdateInput>
+    /**
+     * Choose, which NotificationLog to update.
+     */
+    where: NotificationLogWhereUniqueInput
+  }
+
+  /**
+   * NotificationLog updateMany
+   */
+  export type NotificationLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NotificationLogs.
+     */
+    data: XOR<NotificationLogUpdateManyMutationInput, NotificationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationLogs to update
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * Limit how many NotificationLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationLog updateManyAndReturn
+   */
+  export type NotificationLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * The data used to update NotificationLogs.
+     */
+    data: XOR<NotificationLogUpdateManyMutationInput, NotificationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationLogs to update
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * Limit how many NotificationLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NotificationLog upsert
+   */
+  export type NotificationLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NotificationLog to update in case it exists.
+     */
+    where: NotificationLogWhereUniqueInput
+    /**
+     * In case the NotificationLog found by the `where` argument doesn't exist, create a new NotificationLog with this data.
+     */
+    create: XOR<NotificationLogCreateInput, NotificationLogUncheckedCreateInput>
+    /**
+     * In case the NotificationLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationLogUpdateInput, NotificationLogUncheckedUpdateInput>
+  }
+
+  /**
+   * NotificationLog delete
+   */
+  export type NotificationLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
+    /**
+     * Filter which NotificationLog to delete.
+     */
+    where: NotificationLogWhereUniqueInput
+  }
+
+  /**
+   * NotificationLog deleteMany
+   */
+  export type NotificationLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationLogs to delete
+     */
+    where?: NotificationLogWhereInput
+    /**
+     * Limit how many NotificationLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationLog without action
+   */
+  export type NotificationLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationLog
+     */
+    select?: NotificationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationLog
+     */
+    omit?: NotificationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationLogInclude<ExtArgs> | null
   }
 
 
@@ -4649,13 +6077,13 @@ export namespace Prisma {
   export type TransactionAvgAggregateOutputType = {
     id: number | null
     assetId: number | null
-    employeeId: number | null
+    userId: number | null
   }
 
   export type TransactionSumAggregateOutputType = {
     id: number | null
     assetId: number | null
-    employeeId: number | null
+    userId: number | null
   }
 
   export type TransactionMinAggregateOutputType = {
@@ -4664,7 +6092,7 @@ export namespace Prisma {
     date: Date | null
     notes: string | null
     assetId: number | null
-    employeeId: number | null
+    userId: number | null
   }
 
   export type TransactionMaxAggregateOutputType = {
@@ -4673,7 +6101,7 @@ export namespace Prisma {
     date: Date | null
     notes: string | null
     assetId: number | null
-    employeeId: number | null
+    userId: number | null
   }
 
   export type TransactionCountAggregateOutputType = {
@@ -4682,7 +6110,7 @@ export namespace Prisma {
     date: number
     notes: number
     assetId: number
-    employeeId: number
+    userId: number
     _all: number
   }
 
@@ -4690,13 +6118,13 @@ export namespace Prisma {
   export type TransactionAvgAggregateInputType = {
     id?: true
     assetId?: true
-    employeeId?: true
+    userId?: true
   }
 
   export type TransactionSumAggregateInputType = {
     id?: true
     assetId?: true
-    employeeId?: true
+    userId?: true
   }
 
   export type TransactionMinAggregateInputType = {
@@ -4705,7 +6133,7 @@ export namespace Prisma {
     date?: true
     notes?: true
     assetId?: true
-    employeeId?: true
+    userId?: true
   }
 
   export type TransactionMaxAggregateInputType = {
@@ -4714,7 +6142,7 @@ export namespace Prisma {
     date?: true
     notes?: true
     assetId?: true
-    employeeId?: true
+    userId?: true
   }
 
   export type TransactionCountAggregateInputType = {
@@ -4723,7 +6151,7 @@ export namespace Prisma {
     date?: true
     notes?: true
     assetId?: true
-    employeeId?: true
+    userId?: true
     _all?: true
   }
 
@@ -4819,7 +6247,7 @@ export namespace Prisma {
     date: Date
     notes: string | null
     assetId: number
-    employeeId: number
+    userId: number
     _count: TransactionCountAggregateOutputType | null
     _avg: TransactionAvgAggregateOutputType | null
     _sum: TransactionSumAggregateOutputType | null
@@ -4847,9 +6275,9 @@ export namespace Prisma {
     date?: boolean
     notes?: boolean
     assetId?: boolean
-    employeeId?: boolean
+    userId?: boolean
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4858,9 +6286,9 @@ export namespace Prisma {
     date?: boolean
     notes?: boolean
     assetId?: boolean
-    employeeId?: boolean
+    userId?: boolean
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4869,9 +6297,9 @@ export namespace Prisma {
     date?: boolean
     notes?: boolean
     assetId?: boolean
-    employeeId?: boolean
+    userId?: boolean
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectScalar = {
@@ -4880,28 +6308,28 @@ export namespace Prisma {
     date?: boolean
     notes?: boolean
     assetId?: boolean
-    employeeId?: boolean
+    userId?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "date" | "notes" | "assetId" | "employeeId", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "date" | "notes" | "assetId" | "userId", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asset?: boolean | AssetDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Transaction"
     objects: {
       asset: Prisma.$AssetPayload<ExtArgs>
-      employee: Prisma.$EmployeePayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4909,7 +6337,7 @@ export namespace Prisma {
       date: Date
       notes: string | null
       assetId: number
-      employeeId: number
+      userId: number
     }, ExtArgs["result"]["transaction"]>
     composites: {}
   }
@@ -5305,7 +6733,7 @@ export namespace Prisma {
   export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5340,7 +6768,7 @@ export namespace Prisma {
     readonly date: FieldRef<"Transaction", 'DateTime'>
     readonly notes: FieldRef<"Transaction", 'String'>
     readonly assetId: FieldRef<"Transaction", 'Int'>
-    readonly employeeId: FieldRef<"Transaction", 'Int'>
+    readonly userId: FieldRef<"Transaction", 'Int'>
   }
     
 
@@ -5786,6 +7214,7 @@ export namespace Prisma {
     status: 'status',
     purchaseDate: 'purchaseDate',
     price: 'price',
+    returnDate: 'returnDate',
     typeId: 'typeId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -5794,15 +7223,36 @@ export namespace Prisma {
   export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
 
 
-  export const EmployeeScalarFieldEnum: {
+  export const UserScalarFieldEnum: {
     id: 'id',
     firstName: 'firstName',
     lastName: 'lastName',
     email: 'email',
-    department: 'department'
+    password: 'password',
+    role: 'role',
+    department: 'department',
+    image: 'image',
+    fcmToken: 'fcmToken',
+    fcmSubscribedAt: 'fcmSubscribedAt',
+    fcmDeviceInfo: 'fcmDeviceInfo',
+    resetToken: 'resetToken',
+    resetTokenExpiry: 'resetTokenExpiry'
   };
 
-  export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const NotificationLogScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    status: 'status',
+    message: 'message',
+    sentAt: 'sentAt',
+    userId: 'userId',
+    assetId: 'assetId'
+  };
+
+  export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
 
 
   export const TransactionScalarFieldEnum: {
@@ -5811,7 +7261,7 @@ export namespace Prisma {
     date: 'date',
     notes: 'notes',
     assetId: 'assetId',
-    employeeId: 'employeeId'
+    userId: 'userId'
   };
 
   export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -5917,6 +7367,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Role'
+   */
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role[]'
+   */
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TransactionAction'
    */
   export type EnumTransactionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionAction'>
@@ -6005,11 +7469,13 @@ export namespace Prisma {
     status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
     purchaseDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     price?: DecimalNullableFilter<"Asset"> | Decimal | DecimalJsLike | number | string | null
+    returnDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     typeId?: IntFilter<"Asset"> | number
     createdAt?: DateTimeFilter<"Asset"> | Date | string
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
     type?: XOR<AssetTypeScalarRelationFilter, AssetTypeWhereInput>
     transactions?: TransactionListRelationFilter
+    notifications?: NotificationLogListRelationFilter
   }
 
   export type AssetOrderByWithRelationInput = {
@@ -6020,11 +7486,13 @@ export namespace Prisma {
     status?: SortOrder
     purchaseDate?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    returnDate?: SortOrderInput | SortOrder
     typeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     type?: AssetTypeOrderByWithRelationInput
     transactions?: TransactionOrderByRelationAggregateInput
+    notifications?: NotificationLogOrderByRelationAggregateInput
   }
 
   export type AssetWhereUniqueInput = Prisma.AtLeast<{
@@ -6038,11 +7506,13 @@ export namespace Prisma {
     status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
     purchaseDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     price?: DecimalNullableFilter<"Asset"> | Decimal | DecimalJsLike | number | string | null
+    returnDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     typeId?: IntFilter<"Asset"> | number
     createdAt?: DateTimeFilter<"Asset"> | Date | string
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
     type?: XOR<AssetTypeScalarRelationFilter, AssetTypeWhereInput>
     transactions?: TransactionListRelationFilter
+    notifications?: NotificationLogListRelationFilter
   }, "id" | "code">
 
   export type AssetOrderByWithAggregationInput = {
@@ -6053,6 +7523,7 @@ export namespace Prisma {
     status?: SortOrder
     purchaseDate?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    returnDate?: SortOrderInput | SortOrder
     typeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6074,66 +7545,180 @@ export namespace Prisma {
     status?: EnumAssetStatusWithAggregatesFilter<"Asset"> | $Enums.AssetStatus
     purchaseDate?: DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
     price?: DecimalNullableWithAggregatesFilter<"Asset"> | Decimal | DecimalJsLike | number | string | null
+    returnDate?: DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
     typeId?: IntWithAggregatesFilter<"Asset"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
   }
 
-  export type EmployeeWhereInput = {
-    AND?: EmployeeWhereInput | EmployeeWhereInput[]
-    OR?: EmployeeWhereInput[]
-    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
-    id?: IntFilter<"Employee"> | number
-    firstName?: StringFilter<"Employee"> | string
-    lastName?: StringFilter<"Employee"> | string
-    email?: StringFilter<"Employee"> | string
-    department?: StringNullableFilter<"Employee"> | string | null
+  export type UserWhereInput = {
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    id?: IntFilter<"User"> | number
+    firstName?: StringFilter<"User"> | string
+    lastName?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    department?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
+    fcmToken?: StringNullableFilter<"User"> | string | null
+    fcmSubscribedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    fcmDeviceInfo?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     transactions?: TransactionListRelationFilter
+    notifications?: NotificationLogListRelationFilter
   }
 
-  export type EmployeeOrderByWithRelationInput = {
+  export type UserOrderByWithRelationInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     department?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
+    fcmSubscribedAt?: SortOrderInput | SortOrder
+    fcmDeviceInfo?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
     transactions?: TransactionOrderByRelationAggregateInput
+    notifications?: NotificationLogOrderByRelationAggregateInput
   }
 
-  export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
-    AND?: EmployeeWhereInput | EmployeeWhereInput[]
-    OR?: EmployeeWhereInput[]
-    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
-    firstName?: StringFilter<"Employee"> | string
-    lastName?: StringFilter<"Employee"> | string
-    department?: StringNullableFilter<"Employee"> | string | null
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    firstName?: StringFilter<"User"> | string
+    lastName?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    department?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
+    fcmToken?: StringNullableFilter<"User"> | string | null
+    fcmSubscribedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    fcmDeviceInfo?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     transactions?: TransactionListRelationFilter
+    notifications?: NotificationLogListRelationFilter
   }, "id" | "email">
 
-  export type EmployeeOrderByWithAggregationInput = {
+  export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     department?: SortOrderInput | SortOrder
-    _count?: EmployeeCountOrderByAggregateInput
-    _avg?: EmployeeAvgOrderByAggregateInput
-    _max?: EmployeeMaxOrderByAggregateInput
-    _min?: EmployeeMinOrderByAggregateInput
-    _sum?: EmployeeSumOrderByAggregateInput
+    image?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
+    fcmSubscribedAt?: SortOrderInput | SortOrder
+    fcmDeviceInfo?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
+    _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
+    _max?: UserMaxOrderByAggregateInput
+    _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
-  export type EmployeeScalarWhereWithAggregatesInput = {
-    AND?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
-    OR?: EmployeeScalarWhereWithAggregatesInput[]
-    NOT?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Employee"> | number
-    firstName?: StringWithAggregatesFilter<"Employee"> | string
-    lastName?: StringWithAggregatesFilter<"Employee"> | string
-    email?: StringWithAggregatesFilter<"Employee"> | string
-    department?: StringNullableWithAggregatesFilter<"Employee"> | string | null
+  export type UserScalarWhereWithAggregatesInput = {
+    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    OR?: UserScalarWhereWithAggregatesInput[]
+    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"User"> | number
+    firstName?: StringWithAggregatesFilter<"User"> | string
+    lastName?: StringWithAggregatesFilter<"User"> | string
+    email?: StringWithAggregatesFilter<"User"> | string
+    password?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    department?: StringNullableWithAggregatesFilter<"User"> | string | null
+    image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    fcmToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    fcmSubscribedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    fcmDeviceInfo?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  }
+
+  export type NotificationLogWhereInput = {
+    AND?: NotificationLogWhereInput | NotificationLogWhereInput[]
+    OR?: NotificationLogWhereInput[]
+    NOT?: NotificationLogWhereInput | NotificationLogWhereInput[]
+    id?: IntFilter<"NotificationLog"> | number
+    type?: StringFilter<"NotificationLog"> | string
+    status?: StringFilter<"NotificationLog"> | string
+    message?: StringNullableFilter<"NotificationLog"> | string | null
+    sentAt?: DateTimeFilter<"NotificationLog"> | Date | string
+    userId?: IntFilter<"NotificationLog"> | number
+    assetId?: IntFilter<"NotificationLog"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+  }
+
+  export type NotificationLogOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    sentAt?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+    user?: UserOrderByWithRelationInput
+    asset?: AssetOrderByWithRelationInput
+  }
+
+  export type NotificationLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: NotificationLogWhereInput | NotificationLogWhereInput[]
+    OR?: NotificationLogWhereInput[]
+    NOT?: NotificationLogWhereInput | NotificationLogWhereInput[]
+    type?: StringFilter<"NotificationLog"> | string
+    status?: StringFilter<"NotificationLog"> | string
+    message?: StringNullableFilter<"NotificationLog"> | string | null
+    sentAt?: DateTimeFilter<"NotificationLog"> | Date | string
+    userId?: IntFilter<"NotificationLog"> | number
+    assetId?: IntFilter<"NotificationLog"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+  }, "id">
+
+  export type NotificationLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    sentAt?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+    _count?: NotificationLogCountOrderByAggregateInput
+    _avg?: NotificationLogAvgOrderByAggregateInput
+    _max?: NotificationLogMaxOrderByAggregateInput
+    _min?: NotificationLogMinOrderByAggregateInput
+    _sum?: NotificationLogSumOrderByAggregateInput
+  }
+
+  export type NotificationLogScalarWhereWithAggregatesInput = {
+    AND?: NotificationLogScalarWhereWithAggregatesInput | NotificationLogScalarWhereWithAggregatesInput[]
+    OR?: NotificationLogScalarWhereWithAggregatesInput[]
+    NOT?: NotificationLogScalarWhereWithAggregatesInput | NotificationLogScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"NotificationLog"> | number
+    type?: StringWithAggregatesFilter<"NotificationLog"> | string
+    status?: StringWithAggregatesFilter<"NotificationLog"> | string
+    message?: StringNullableWithAggregatesFilter<"NotificationLog"> | string | null
+    sentAt?: DateTimeWithAggregatesFilter<"NotificationLog"> | Date | string
+    userId?: IntWithAggregatesFilter<"NotificationLog"> | number
+    assetId?: IntWithAggregatesFilter<"NotificationLog"> | number
   }
 
   export type TransactionWhereInput = {
@@ -6145,9 +7730,9 @@ export namespace Prisma {
     date?: DateTimeFilter<"Transaction"> | Date | string
     notes?: StringNullableFilter<"Transaction"> | string | null
     assetId?: IntFilter<"Transaction"> | number
-    employeeId?: IntFilter<"Transaction"> | number
+    userId?: IntFilter<"Transaction"> | number
     asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type TransactionOrderByWithRelationInput = {
@@ -6156,9 +7741,9 @@ export namespace Prisma {
     date?: SortOrder
     notes?: SortOrderInput | SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
     asset?: AssetOrderByWithRelationInput
-    employee?: EmployeeOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -6170,9 +7755,9 @@ export namespace Prisma {
     date?: DateTimeFilter<"Transaction"> | Date | string
     notes?: StringNullableFilter<"Transaction"> | string | null
     assetId?: IntFilter<"Transaction"> | number
-    employeeId?: IntFilter<"Transaction"> | number
+    userId?: IntFilter<"Transaction"> | number
     asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type TransactionOrderByWithAggregationInput = {
@@ -6181,7 +7766,7 @@ export namespace Prisma {
     date?: SortOrder
     notes?: SortOrderInput | SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
     _count?: TransactionCountOrderByAggregateInput
     _avg?: TransactionAvgOrderByAggregateInput
     _max?: TransactionMaxOrderByAggregateInput
@@ -6198,7 +7783,7 @@ export namespace Prisma {
     date?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     notes?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     assetId?: IntWithAggregatesFilter<"Transaction"> | number
-    employeeId?: IntWithAggregatesFilter<"Transaction"> | number
+    userId?: IntWithAggregatesFilter<"Transaction"> | number
   }
 
   export type AssetTypeCreateInput = {
@@ -6251,10 +7836,12 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     type: AssetTypeCreateNestedOneWithoutAssetsInput
     transactions?: TransactionCreateNestedManyWithoutAssetInput
+    notifications?: NotificationLogCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUncheckedCreateInput = {
@@ -6265,10 +7852,12 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     typeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutAssetInput
+    notifications?: NotificationLogUncheckedCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUpdateInput = {
@@ -6278,10 +7867,12 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: AssetTypeUpdateOneRequiredWithoutAssetsNestedInput
     transactions?: TransactionUpdateManyWithoutAssetNestedInput
+    notifications?: NotificationLogUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetUncheckedUpdateInput = {
@@ -6292,10 +7883,12 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     typeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUncheckedUpdateManyWithoutAssetNestedInput
+    notifications?: NotificationLogUncheckedUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetCreateManyInput = {
@@ -6306,6 +7899,7 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     typeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6318,6 +7912,7 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6330,66 +7925,192 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     typeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EmployeeCreateInput = {
+  export type UserCreateInput = {
     firstName: string
     lastName: string
     email: string
+    password: string
+    role?: $Enums.Role
     department?: string | null
-    transactions?: TransactionCreateNestedManyWithoutEmployeeInput
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    notifications?: NotificationLogCreateNestedManyWithoutUserInput
   }
 
-  export type EmployeeUncheckedCreateInput = {
+  export type UserUncheckedCreateInput = {
     id?: number
     firstName: string
     lastName: string
     email: string
+    password: string
+    role?: $Enums.Role
     department?: string | null
-    transactions?: TransactionUncheckedCreateNestedManyWithoutEmployeeInput
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationLogUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type EmployeeUpdateInput = {
+  export type UserUpdateInput = {
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
-    transactions?: TransactionUpdateManyWithoutEmployeeNestedInput
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    notifications?: NotificationLogUpdateManyWithoutUserNestedInput
   }
 
-  export type EmployeeUncheckedUpdateInput = {
+  export type UserUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
-    transactions?: TransactionUncheckedUpdateManyWithoutEmployeeNestedInput
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type EmployeeCreateManyInput = {
+  export type UserCreateManyInput = {
     id?: number
     firstName: string
     lastName: string
     email: string
+    password: string
+    role?: $Enums.Role
     department?: string | null
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
   }
 
-  export type EmployeeUpdateManyMutationInput = {
+  export type UserUpdateManyMutationInput = {
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type EmployeeUncheckedUpdateManyInput = {
+  export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationLogCreateInput = {
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+    asset: AssetCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationLogUncheckedCreateInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    userId: number
+    assetId: number
+  }
+
+  export type NotificationLogUpdateInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+    asset?: AssetUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationLogUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type NotificationLogCreateManyInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    userId: number
+    assetId: number
+  }
+
+  export type NotificationLogUpdateManyMutationInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationLogUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionCreateInput = {
@@ -6397,7 +8118,7 @@ export namespace Prisma {
     date?: Date | string
     notes?: string | null
     asset: AssetCreateNestedOneWithoutTransactionsInput
-    employee: EmployeeCreateNestedOneWithoutTransactionsInput
+    user: UserCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateInput = {
@@ -6406,7 +8127,7 @@ export namespace Prisma {
     date?: Date | string
     notes?: string | null
     assetId: number
-    employeeId: number
+    userId: number
   }
 
   export type TransactionUpdateInput = {
@@ -6414,7 +8135,7 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     asset?: AssetUpdateOneRequiredWithoutTransactionsNestedInput
-    employee?: EmployeeUpdateOneRequiredWithoutTransactionsNestedInput
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
@@ -6423,7 +8144,7 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     assetId?: IntFieldUpdateOperationsInput | number
-    employeeId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionCreateManyInput = {
@@ -6432,7 +8153,7 @@ export namespace Prisma {
     date?: Date | string
     notes?: string | null
     assetId: number
-    employeeId: number
+    userId: number
   }
 
   export type TransactionUpdateManyMutationInput = {
@@ -6447,7 +8168,7 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     assetId?: IntFieldUpdateOperationsInput | number
-    employeeId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6635,7 +8356,17 @@ export namespace Prisma {
     none?: TransactionWhereInput
   }
 
+  export type NotificationLogListRelationFilter = {
+    every?: NotificationLogWhereInput
+    some?: NotificationLogWhereInput
+    none?: NotificationLogWhereInput
+  }
+
   export type TransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6647,6 +8378,7 @@ export namespace Prisma {
     status?: SortOrder
     purchaseDate?: SortOrder
     price?: SortOrder
+    returnDate?: SortOrder
     typeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6666,6 +8398,7 @@ export namespace Prisma {
     status?: SortOrder
     purchaseDate?: SortOrder
     price?: SortOrder
+    returnDate?: SortOrder
     typeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6679,6 +8412,7 @@ export namespace Prisma {
     status?: SortOrder
     purchaseDate?: SortOrder
     price?: SortOrder
+    returnDate?: SortOrder
     typeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6744,36 +8478,129 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type EmployeeCountOrderByAggregateInput = {
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     department?: SortOrder
+    image?: SortOrder
+    fcmToken?: SortOrder
+    fcmSubscribedAt?: SortOrder
+    fcmDeviceInfo?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
-  export type EmployeeAvgOrderByAggregateInput = {
+  export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type EmployeeMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     department?: SortOrder
+    image?: SortOrder
+    fcmToken?: SortOrder
+    fcmSubscribedAt?: SortOrder
+    fcmDeviceInfo?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
-  export type EmployeeMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     department?: SortOrder
+    image?: SortOrder
+    fcmToken?: SortOrder
+    fcmSubscribedAt?: SortOrder
+    fcmDeviceInfo?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
-  export type EmployeeSumOrderByAggregateInput = {
+  export type UserSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type AssetScalarRelationFilter = {
+    is?: AssetWhereInput
+    isNot?: AssetWhereInput
+  }
+
+  export type NotificationLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    sentAt?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+  }
+
+  export type NotificationLogAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+  }
+
+  export type NotificationLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    sentAt?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+  }
+
+  export type NotificationLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    sentAt?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
+  }
+
+  export type NotificationLogSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assetId?: SortOrder
   }
 
   export type EnumTransactionActionFilter<$PrismaModel = never> = {
@@ -6783,29 +8610,19 @@ export namespace Prisma {
     not?: NestedEnumTransactionActionFilter<$PrismaModel> | $Enums.TransactionAction
   }
 
-  export type AssetScalarRelationFilter = {
-    is?: AssetWhereInput
-    isNot?: AssetWhereInput
-  }
-
-  export type EmployeeScalarRelationFilter = {
-    is?: EmployeeWhereInput
-    isNot?: EmployeeWhereInput
-  }
-
   export type TransactionCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
     date?: SortOrder
     notes?: SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
   }
 
   export type TransactionAvgOrderByAggregateInput = {
     id?: SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
   }
 
   export type TransactionMaxOrderByAggregateInput = {
@@ -6814,7 +8631,7 @@ export namespace Prisma {
     date?: SortOrder
     notes?: SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
   }
 
   export type TransactionMinOrderByAggregateInput = {
@@ -6823,13 +8640,13 @@ export namespace Prisma {
     date?: SortOrder
     notes?: SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
   }
 
   export type TransactionSumOrderByAggregateInput = {
     id?: SortOrder
     assetId?: SortOrder
-    employeeId?: SortOrder
+    userId?: SortOrder
   }
 
   export type EnumTransactionActionWithAggregatesFilter<$PrismaModel = never> = {
@@ -6913,11 +8730,25 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
+  export type NotificationLogCreateNestedManyWithoutAssetInput = {
+    create?: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput> | NotificationLogCreateWithoutAssetInput[] | NotificationLogUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutAssetInput | NotificationLogCreateOrConnectWithoutAssetInput[]
+    createMany?: NotificationLogCreateManyAssetInputEnvelope
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+  }
+
   export type TransactionUncheckedCreateNestedManyWithoutAssetInput = {
     create?: XOR<TransactionCreateWithoutAssetInput, TransactionUncheckedCreateWithoutAssetInput> | TransactionCreateWithoutAssetInput[] | TransactionUncheckedCreateWithoutAssetInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutAssetInput | TransactionCreateOrConnectWithoutAssetInput[]
     createMany?: TransactionCreateManyAssetInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type NotificationLogUncheckedCreateNestedManyWithoutAssetInput = {
+    create?: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput> | NotificationLogCreateWithoutAssetInput[] | NotificationLogUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutAssetInput | NotificationLogCreateOrConnectWithoutAssetInput[]
+    createMany?: NotificationLogCreateManyAssetInputEnvelope
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
   }
 
   export type EnumAssetStatusFieldUpdateOperationsInput = {
@@ -6962,6 +8793,20 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
+  export type NotificationLogUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput> | NotificationLogCreateWithoutAssetInput[] | NotificationLogUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutAssetInput | NotificationLogCreateOrConnectWithoutAssetInput[]
+    upsert?: NotificationLogUpsertWithWhereUniqueWithoutAssetInput | NotificationLogUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: NotificationLogCreateManyAssetInputEnvelope
+    set?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    disconnect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    delete?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    update?: NotificationLogUpdateWithWhereUniqueWithoutAssetInput | NotificationLogUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: NotificationLogUpdateManyWithWhereWithoutAssetInput | NotificationLogUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+  }
+
   export type TransactionUncheckedUpdateManyWithoutAssetNestedInput = {
     create?: XOR<TransactionCreateWithoutAssetInput, TransactionUncheckedCreateWithoutAssetInput> | TransactionCreateWithoutAssetInput[] | TransactionUncheckedCreateWithoutAssetInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutAssetInput | TransactionCreateOrConnectWithoutAssetInput[]
@@ -6976,46 +8821,134 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
-  export type TransactionCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput> | TransactionCreateWithoutEmployeeInput[] | TransactionUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutEmployeeInput | TransactionCreateOrConnectWithoutEmployeeInput[]
-    createMany?: TransactionCreateManyEmployeeInputEnvelope
+  export type NotificationLogUncheckedUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput> | NotificationLogCreateWithoutAssetInput[] | NotificationLogUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutAssetInput | NotificationLogCreateOrConnectWithoutAssetInput[]
+    upsert?: NotificationLogUpsertWithWhereUniqueWithoutAssetInput | NotificationLogUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: NotificationLogCreateManyAssetInputEnvelope
+    set?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    disconnect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    delete?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    update?: NotificationLogUpdateWithWhereUniqueWithoutAssetInput | NotificationLogUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: NotificationLogUpdateManyWithWhereWithoutAssetInput | NotificationLogUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+  }
+
+  export type TransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
-  export type TransactionUncheckedCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput> | TransactionCreateWithoutEmployeeInput[] | TransactionUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutEmployeeInput | TransactionCreateOrConnectWithoutEmployeeInput[]
-    createMany?: TransactionCreateManyEmployeeInputEnvelope
+  export type NotificationLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput> | NotificationLogCreateWithoutUserInput[] | NotificationLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutUserInput | NotificationLogCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationLogCreateManyUserInputEnvelope
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
-  export type TransactionUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput> | TransactionCreateWithoutEmployeeInput[] | TransactionUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutEmployeeInput | TransactionCreateOrConnectWithoutEmployeeInput[]
-    upsert?: TransactionUpsertWithWhereUniqueWithoutEmployeeInput | TransactionUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: TransactionCreateManyEmployeeInputEnvelope
+  export type NotificationLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput> | NotificationLogCreateWithoutUserInput[] | NotificationLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutUserInput | NotificationLogCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationLogCreateManyUserInputEnvelope
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+  }
+
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
+  }
+
+  export type TransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
     set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    update?: TransactionUpdateWithWhereUniqueWithoutEmployeeInput | TransactionUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: TransactionUpdateManyWithWhereWithoutEmployeeInput | TransactionUpdateManyWithWhereWithoutEmployeeInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
-  export type TransactionUncheckedUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput> | TransactionCreateWithoutEmployeeInput[] | TransactionUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutEmployeeInput | TransactionCreateOrConnectWithoutEmployeeInput[]
-    upsert?: TransactionUpsertWithWhereUniqueWithoutEmployeeInput | TransactionUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: TransactionCreateManyEmployeeInputEnvelope
+  export type NotificationLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput> | NotificationLogCreateWithoutUserInput[] | NotificationLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutUserInput | NotificationLogCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationLogUpsertWithWhereUniqueWithoutUserInput | NotificationLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationLogCreateManyUserInputEnvelope
+    set?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    disconnect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    delete?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    update?: NotificationLogUpdateWithWhereUniqueWithoutUserInput | NotificationLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationLogUpdateManyWithWhereWithoutUserInput | NotificationLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
     set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    update?: TransactionUpdateWithWhereUniqueWithoutEmployeeInput | TransactionUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: TransactionUpdateManyWithWhereWithoutEmployeeInput | TransactionUpdateManyWithWhereWithoutEmployeeInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type NotificationLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput> | NotificationLogCreateWithoutUserInput[] | NotificationLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationLogCreateOrConnectWithoutUserInput | NotificationLogCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationLogUpsertWithWhereUniqueWithoutUserInput | NotificationLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationLogCreateManyUserInputEnvelope
+    set?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    disconnect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    delete?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    connect?: NotificationLogWhereUniqueInput | NotificationLogWhereUniqueInput[]
+    update?: NotificationLogUpdateWithWhereUniqueWithoutUserInput | NotificationLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationLogUpdateManyWithWhereWithoutUserInput | NotificationLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AssetCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<AssetCreateWithoutNotificationsInput, AssetUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutNotificationsInput
+    connect?: AssetWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type AssetUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<AssetCreateWithoutNotificationsInput, AssetUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutNotificationsInput
+    upsert?: AssetUpsertWithoutNotificationsInput
+    connect?: AssetWhereUniqueInput
+    update?: XOR<XOR<AssetUpdateToOneWithWhereWithoutNotificationsInput, AssetUpdateWithoutNotificationsInput>, AssetUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type AssetCreateNestedOneWithoutTransactionsInput = {
@@ -7024,10 +8957,10 @@ export namespace Prisma {
     connect?: AssetWhereUniqueInput
   }
 
-  export type EmployeeCreateNestedOneWithoutTransactionsInput = {
-    create?: XOR<EmployeeCreateWithoutTransactionsInput, EmployeeUncheckedCreateWithoutTransactionsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutTransactionsInput
-    connect?: EmployeeWhereUniqueInput
+  export type UserCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type EnumTransactionActionFieldUpdateOperationsInput = {
@@ -7042,12 +8975,12 @@ export namespace Prisma {
     update?: XOR<XOR<AssetUpdateToOneWithWhereWithoutTransactionsInput, AssetUpdateWithoutTransactionsInput>, AssetUncheckedUpdateWithoutTransactionsInput>
   }
 
-  export type EmployeeUpdateOneRequiredWithoutTransactionsNestedInput = {
-    create?: XOR<EmployeeCreateWithoutTransactionsInput, EmployeeUncheckedCreateWithoutTransactionsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutTransactionsInput
-    upsert?: EmployeeUpsertWithoutTransactionsInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutTransactionsInput, EmployeeUpdateWithoutTransactionsInput>, EmployeeUncheckedUpdateWithoutTransactionsInput>
+  export type UserUpdateOneRequiredWithoutTransactionsNestedInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    upsert?: UserUpsertWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransactionsInput, UserUpdateWithoutTransactionsInput>, UserUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -7255,6 +9188,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
   export type NestedEnumTransactionActionFilter<$PrismaModel = never> = {
     equals?: $Enums.TransactionAction | EnumTransactionActionFieldRefInput<$PrismaModel>
     in?: $Enums.TransactionAction[] | ListEnumTransactionActionFieldRefInput<$PrismaModel>
@@ -7279,9 +9229,11 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionCreateNestedManyWithoutAssetInput
+    notifications?: NotificationLogCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUncheckedCreateWithoutTypeInput = {
@@ -7292,9 +9244,11 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutAssetInput
+    notifications?: NotificationLogUncheckedCreateNestedManyWithoutAssetInput
   }
 
   export type AssetCreateOrConnectWithoutTypeInput = {
@@ -7334,6 +9288,7 @@ export namespace Prisma {
     status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
     purchaseDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     price?: DecimalNullableFilter<"Asset"> | Decimal | DecimalJsLike | number | string | null
+    returnDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
     typeId?: IntFilter<"Asset"> | number
     createdAt?: DateTimeFilter<"Asset"> | Date | string
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
@@ -7359,7 +9314,7 @@ export namespace Prisma {
     action: $Enums.TransactionAction
     date?: Date | string
     notes?: string | null
-    employee: EmployeeCreateNestedOneWithoutTransactionsInput
+    user: UserCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateWithoutAssetInput = {
@@ -7367,7 +9322,7 @@ export namespace Prisma {
     action: $Enums.TransactionAction
     date?: Date | string
     notes?: string | null
-    employeeId: number
+    userId: number
   }
 
   export type TransactionCreateOrConnectWithoutAssetInput = {
@@ -7377,6 +9332,33 @@ export namespace Prisma {
 
   export type TransactionCreateManyAssetInputEnvelope = {
     data: TransactionCreateManyAssetInput | TransactionCreateManyAssetInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationLogCreateWithoutAssetInput = {
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationLogUncheckedCreateWithoutAssetInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    userId: number
+  }
+
+  export type NotificationLogCreateOrConnectWithoutAssetInput = {
+    where: NotificationLogWhereUniqueInput
+    create: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput>
+  }
+
+  export type NotificationLogCreateManyAssetInputEnvelope = {
+    data: NotificationLogCreateManyAssetInput | NotificationLogCreateManyAssetInput[]
     skipDuplicates?: boolean
   }
 
@@ -7427,17 +9409,46 @@ export namespace Prisma {
     date?: DateTimeFilter<"Transaction"> | Date | string
     notes?: StringNullableFilter<"Transaction"> | string | null
     assetId?: IntFilter<"Transaction"> | number
-    employeeId?: IntFilter<"Transaction"> | number
+    userId?: IntFilter<"Transaction"> | number
   }
 
-  export type TransactionCreateWithoutEmployeeInput = {
+  export type NotificationLogUpsertWithWhereUniqueWithoutAssetInput = {
+    where: NotificationLogWhereUniqueInput
+    update: XOR<NotificationLogUpdateWithoutAssetInput, NotificationLogUncheckedUpdateWithoutAssetInput>
+    create: XOR<NotificationLogCreateWithoutAssetInput, NotificationLogUncheckedCreateWithoutAssetInput>
+  }
+
+  export type NotificationLogUpdateWithWhereUniqueWithoutAssetInput = {
+    where: NotificationLogWhereUniqueInput
+    data: XOR<NotificationLogUpdateWithoutAssetInput, NotificationLogUncheckedUpdateWithoutAssetInput>
+  }
+
+  export type NotificationLogUpdateManyWithWhereWithoutAssetInput = {
+    where: NotificationLogScalarWhereInput
+    data: XOR<NotificationLogUpdateManyMutationInput, NotificationLogUncheckedUpdateManyWithoutAssetInput>
+  }
+
+  export type NotificationLogScalarWhereInput = {
+    AND?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+    OR?: NotificationLogScalarWhereInput[]
+    NOT?: NotificationLogScalarWhereInput | NotificationLogScalarWhereInput[]
+    id?: IntFilter<"NotificationLog"> | number
+    type?: StringFilter<"NotificationLog"> | string
+    status?: StringFilter<"NotificationLog"> | string
+    message?: StringNullableFilter<"NotificationLog"> | string | null
+    sentAt?: DateTimeFilter<"NotificationLog"> | Date | string
+    userId?: IntFilter<"NotificationLog"> | number
+    assetId?: IntFilter<"NotificationLog"> | number
+  }
+
+  export type TransactionCreateWithoutUserInput = {
     action: $Enums.TransactionAction
     date?: Date | string
     notes?: string | null
     asset: AssetCreateNestedOneWithoutTransactionsInput
   }
 
-  export type TransactionUncheckedCreateWithoutEmployeeInput = {
+  export type TransactionUncheckedCreateWithoutUserInput = {
     id?: number
     action: $Enums.TransactionAction
     date?: Date | string
@@ -7445,30 +9456,229 @@ export namespace Prisma {
     assetId: number
   }
 
-  export type TransactionCreateOrConnectWithoutEmployeeInput = {
+  export type TransactionCreateOrConnectWithoutUserInput = {
     where: TransactionWhereUniqueInput
-    create: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput>
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
   }
 
-  export type TransactionCreateManyEmployeeInputEnvelope = {
-    data: TransactionCreateManyEmployeeInput | TransactionCreateManyEmployeeInput[]
+  export type TransactionCreateManyUserInputEnvelope = {
+    data: TransactionCreateManyUserInput | TransactionCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
-  export type TransactionUpsertWithWhereUniqueWithoutEmployeeInput = {
-    where: TransactionWhereUniqueInput
-    update: XOR<TransactionUpdateWithoutEmployeeInput, TransactionUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<TransactionCreateWithoutEmployeeInput, TransactionUncheckedCreateWithoutEmployeeInput>
+  export type NotificationLogCreateWithoutUserInput = {
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    asset: AssetCreateNestedOneWithoutNotificationsInput
   }
 
-  export type TransactionUpdateWithWhereUniqueWithoutEmployeeInput = {
-    where: TransactionWhereUniqueInput
-    data: XOR<TransactionUpdateWithoutEmployeeInput, TransactionUncheckedUpdateWithoutEmployeeInput>
+  export type NotificationLogUncheckedCreateWithoutUserInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    assetId: number
   }
 
-  export type TransactionUpdateManyWithWhereWithoutEmployeeInput = {
+  export type NotificationLogCreateOrConnectWithoutUserInput = {
+    where: NotificationLogWhereUniqueInput
+    create: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationLogCreateManyUserInputEnvelope = {
+    data: NotificationLogCreateManyUserInput | NotificationLogCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutUserInput = {
     where: TransactionScalarWhereInput
-    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutEmployeeInput>
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationLogWhereUniqueInput
+    update: XOR<NotificationLogUpdateWithoutUserInput, NotificationLogUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationLogCreateWithoutUserInput, NotificationLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationLogWhereUniqueInput
+    data: XOR<NotificationLogUpdateWithoutUserInput, NotificationLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationLogUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationLogScalarWhereInput
+    data: XOR<NotificationLogUpdateManyMutationInput, NotificationLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: number
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type AssetCreateWithoutNotificationsInput = {
+    code: string
+    name: string
+    serialNumber?: string | null
+    status?: $Enums.AssetStatus
+    purchaseDate?: Date | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    type: AssetTypeCreateNestedOneWithoutAssetsInput
+    transactions?: TransactionCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUncheckedCreateWithoutNotificationsInput = {
+    id?: number
+    code: string
+    name: string
+    serialNumber?: string | null
+    status?: $Enums.AssetStatus
+    purchaseDate?: Date | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
+    typeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: TransactionUncheckedCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetCreateOrConnectWithoutNotificationsInput = {
+    where: AssetWhereUniqueInput
+    create: XOR<AssetCreateWithoutNotificationsInput, AssetUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type AssetUpsertWithoutNotificationsInput = {
+    update: XOR<AssetUpdateWithoutNotificationsInput, AssetUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<AssetCreateWithoutNotificationsInput, AssetUncheckedCreateWithoutNotificationsInput>
+    where?: AssetWhereInput
+  }
+
+  export type AssetUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: AssetWhereInput
+    data: XOR<AssetUpdateWithoutNotificationsInput, AssetUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type AssetUpdateWithoutNotificationsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: AssetTypeUpdateOneRequiredWithoutAssetsNestedInput
+    transactions?: TransactionUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetUncheckedUpdateWithoutNotificationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    typeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: TransactionUncheckedUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetCreateWithoutTransactionsInput = {
@@ -7478,9 +9688,11 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     type: AssetTypeCreateNestedOneWithoutAssetsInput
+    notifications?: NotificationLogCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUncheckedCreateWithoutTransactionsInput = {
@@ -7491,9 +9703,11 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     typeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    notifications?: NotificationLogUncheckedCreateNestedManyWithoutAssetInput
   }
 
   export type AssetCreateOrConnectWithoutTransactionsInput = {
@@ -7501,24 +9715,42 @@ export namespace Prisma {
     create: XOR<AssetCreateWithoutTransactionsInput, AssetUncheckedCreateWithoutTransactionsInput>
   }
 
-  export type EmployeeCreateWithoutTransactionsInput = {
+  export type UserCreateWithoutTransactionsInput = {
     firstName: string
     lastName: string
     email: string
+    password: string
+    role?: $Enums.Role
     department?: string | null
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    notifications?: NotificationLogCreateNestedManyWithoutUserInput
   }
 
-  export type EmployeeUncheckedCreateWithoutTransactionsInput = {
+  export type UserUncheckedCreateWithoutTransactionsInput = {
     id?: number
     firstName: string
     lastName: string
     email: string
+    password: string
+    role?: $Enums.Role
     department?: string | null
+    image?: string | null
+    fcmToken?: string | null
+    fcmSubscribedAt?: Date | string | null
+    fcmDeviceInfo?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    notifications?: NotificationLogUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type EmployeeCreateOrConnectWithoutTransactionsInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutTransactionsInput, EmployeeUncheckedCreateWithoutTransactionsInput>
+  export type UserCreateOrConnectWithoutTransactionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
   }
 
   export type AssetUpsertWithoutTransactionsInput = {
@@ -7539,9 +9771,11 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: AssetTypeUpdateOneRequiredWithoutAssetsNestedInput
+    notifications?: NotificationLogUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetUncheckedUpdateWithoutTransactionsInput = {
@@ -7552,35 +9786,55 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     typeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notifications?: NotificationLogUncheckedUpdateManyWithoutAssetNestedInput
   }
 
-  export type EmployeeUpsertWithoutTransactionsInput = {
-    update: XOR<EmployeeUpdateWithoutTransactionsInput, EmployeeUncheckedUpdateWithoutTransactionsInput>
-    create: XOR<EmployeeCreateWithoutTransactionsInput, EmployeeUncheckedCreateWithoutTransactionsInput>
-    where?: EmployeeWhereInput
+  export type UserUpsertWithoutTransactionsInput = {
+    update: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    where?: UserWhereInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutTransactionsInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutTransactionsInput, EmployeeUncheckedUpdateWithoutTransactionsInput>
+  export type UserUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
   }
 
-  export type EmployeeUpdateWithoutTransactionsInput = {
+  export type UserUpdateWithoutTransactionsInput = {
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifications?: NotificationLogUpdateManyWithoutUserNestedInput
   }
 
-  export type EmployeeUncheckedUpdateWithoutTransactionsInput = {
+  export type UserUncheckedUpdateWithoutTransactionsInput = {
     id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmSubscribedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fcmDeviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifications?: NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AssetCreateManyTypeInput = {
@@ -7591,6 +9845,7 @@ export namespace Prisma {
     status?: $Enums.AssetStatus
     purchaseDate?: Date | string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    returnDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7602,9 +9857,11 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUpdateManyWithoutAssetNestedInput
+    notifications?: NotificationLogUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetUncheckedUpdateWithoutTypeInput = {
@@ -7615,9 +9872,11 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUncheckedUpdateManyWithoutAssetNestedInput
+    notifications?: NotificationLogUncheckedUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetUncheckedUpdateManyWithoutTypeInput = {
@@ -7628,6 +9887,7 @@ export namespace Prisma {
     status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    returnDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7637,14 +9897,23 @@ export namespace Prisma {
     action: $Enums.TransactionAction
     date?: Date | string
     notes?: string | null
-    employeeId: number
+    userId: number
+  }
+
+  export type NotificationLogCreateManyAssetInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    userId: number
   }
 
   export type TransactionUpdateWithoutAssetInput = {
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    employee?: EmployeeUpdateOneRequiredWithoutTransactionsNestedInput
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutAssetInput = {
@@ -7652,7 +9921,7 @@ export namespace Prisma {
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    employeeId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionUncheckedUpdateManyWithoutAssetInput = {
@@ -7660,10 +9929,36 @@ export namespace Prisma {
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    employeeId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type TransactionCreateManyEmployeeInput = {
+  export type NotificationLogUpdateWithoutAssetInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationLogUncheckedUpdateWithoutAssetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type NotificationLogUncheckedUpdateManyWithoutAssetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TransactionCreateManyUserInput = {
     id?: number
     action: $Enums.TransactionAction
     date?: Date | string
@@ -7671,14 +9966,23 @@ export namespace Prisma {
     assetId: number
   }
 
-  export type TransactionUpdateWithoutEmployeeInput = {
+  export type NotificationLogCreateManyUserInput = {
+    id?: number
+    type: string
+    status: string
+    message?: string | null
+    sentAt?: Date | string
+    assetId: number
+  }
+
+  export type TransactionUpdateWithoutUserInput = {
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     asset?: AssetUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
-  export type TransactionUncheckedUpdateWithoutEmployeeInput = {
+  export type TransactionUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7686,11 +9990,37 @@ export namespace Prisma {
     assetId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type TransactionUncheckedUpdateManyWithoutEmployeeInput = {
+  export type TransactionUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     action?: EnumTransactionActionFieldUpdateOperationsInput | $Enums.TransactionAction
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assetId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type NotificationLogUpdateWithoutUserInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    asset?: AssetUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationLogUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assetId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type NotificationLogUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assetId?: IntFieldUpdateOperationsInput | number
   }
 

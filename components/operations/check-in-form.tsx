@@ -56,7 +56,11 @@ const formSchema = z.object({
 
 type CheckInFormData = z.infer<typeof formSchema>;
 
-export function CheckInForm() {
+interface CheckInFormProps {
+  currentUser: any;
+}
+
+export function CheckInForm({ currentUser }: CheckInFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [assets, setAssets] = useState<{ id: number; code: string; name: string }[]>([]);
@@ -76,7 +80,13 @@ export function CheckInForm() {
   useEffect(() => {
     async function fetchData() {
       // Fetch IN_USE Assets
-      const assetResult = await getAssets({ status: AssetStatus.IN_USE, limit: 100 }); 
+      const isEmployee = currentUser?.role === "EMPLOYEE";
+      const params = {
+        status: AssetStatus.IN_USE, 
+        limit: 100,
+        holderId: isEmployee ? Number(currentUser.id) : undefined 
+      };
+      const assetResult = await getAssets(params); 
       if (assetResult.success && assetResult.data) {
         setAssets(assetResult.data);
       }

@@ -107,17 +107,36 @@ exports.Prisma.AssetScalarFieldEnum = {
   status: 'status',
   purchaseDate: 'purchaseDate',
   price: 'price',
+  returnDate: 'returnDate',
   typeId: 'typeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.EmployeeScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
-  department: 'department'
+  password: 'password',
+  role: 'role',
+  department: 'department',
+  image: 'image',
+  fcmToken: 'fcmToken',
+  fcmSubscribedAt: 'fcmSubscribedAt',
+  fcmDeviceInfo: 'fcmDeviceInfo',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry'
+};
+
+exports.Prisma.NotificationLogScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  message: 'message',
+  sentAt: 'sentAt',
+  userId: 'userId',
+  assetId: 'assetId'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -126,7 +145,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   date: 'date',
   notes: 'notes',
   assetId: 'assetId',
-  employeeId: 'employeeId'
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -150,6 +169,11 @@ exports.AssetStatus = exports.$Enums.AssetStatus = {
   RETIRED: 'RETIRED'
 };
 
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  EMPLOYEE: 'EMPLOYEE'
+};
+
 exports.TransactionAction = exports.$Enums.TransactionAction = {
   CHECK_OUT: 'CHECK_OUT',
   CHECK_IN: 'CHECK_IN'
@@ -158,7 +182,8 @@ exports.TransactionAction = exports.$Enums.TransactionAction = {
 exports.Prisma.ModelName = {
   AssetType: 'AssetType',
   Asset: 'Asset',
-  Employee: 'Employee',
+  User: 'User',
+  NotificationLog: 'NotificationLog',
   Transaction: 'Transaction'
 };
 /**
@@ -200,7 +225,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -209,13 +233,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel AssetType {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n  assets      Asset[]\n}\n\nmodel Asset {\n  id           Int           @id @default(autoincrement())\n  code         String        @unique\n  name         String\n  serialNumber String?\n  status       AssetStatus   @default(AVAILABLE)\n  purchaseDate DateTime?\n  price        Decimal?\n  typeId       Int\n  type         AssetType     @relation(fields: [typeId], references: [id])\n  transactions Transaction[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum AssetStatus {\n  AVAILABLE\n  IN_USE\n  MAINTENANCE\n  RETIRED\n}\n\nmodel Employee {\n  id           Int           @id @default(autoincrement())\n  firstName    String\n  lastName     String\n  email        String        @unique\n  department   String?\n  transactions Transaction[]\n}\n\nmodel Transaction {\n  id         Int               @id @default(autoincrement())\n  action     TransactionAction\n  date       DateTime          @default(now())\n  notes      String?\n  assetId    Int\n  asset      Asset             @relation(fields: [assetId], references: [id])\n  employeeId Int\n  employee   Employee          @relation(fields: [employeeId], references: [id])\n}\n\nenum TransactionAction {\n  CHECK_OUT\n  CHECK_IN\n}\n",
-  "inlineSchemaHash": "bff05e5182378569859a7521ba93f4fb12b9d09e63da078f9463fa0cbd035aa3",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel AssetType {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n  assets      Asset[]\n}\n\nmodel Asset {\n  id            Int               @id @default(autoincrement())\n  code          String            @unique\n  name          String\n  serialNumber  String?\n  status        AssetStatus       @default(AVAILABLE)\n  purchaseDate  DateTime?\n  price         Decimal?\n  returnDate    DateTime? // For defining when the asset should be returned\n  typeId        Int\n  type          AssetType         @relation(fields: [typeId], references: [id])\n  transactions  Transaction[]\n  notifications NotificationLog[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum AssetStatus {\n  AVAILABLE\n  IN_USE\n  MAINTENANCE\n  RETIRED\n}\n\nenum Role {\n  ADMIN\n  EMPLOYEE\n}\n\nmodel User {\n  id              Int       @id @default(autoincrement())\n  firstName       String\n  lastName        String\n  email           String    @unique\n  password        String // Hashed Password\n  role            Role      @default(EMPLOYEE)\n  department      String?\n  image           String?\n  fcmToken        String? // Firebase Cloud Messaging Token\n  fcmSubscribedAt DateTime? // When user subscribed to push notifications\n  fcmDeviceInfo   String? // Browser/Device info (user agent)\n\n  resetToken       String?\n  resetTokenExpiry DateTime?\n\n  transactions  Transaction[]\n  notifications NotificationLog[]\n\n  @@map(\"users\")\n}\n\nmodel NotificationLog {\n  id      Int      @id @default(autoincrement())\n  type    String // \"EMAIL\", \"PUSH\"\n  status  String // \"SUCCESS\", \"FAILED\"\n  message String?\n  sentAt  DateTime @default(now())\n\n  userId  Int\n  user    User  @relation(fields: [userId], references: [id])\n  assetId Int\n  asset   Asset @relation(fields: [assetId], references: [id])\n}\n\nmodel Transaction {\n  id      Int               @id @default(autoincrement())\n  action  TransactionAction\n  date    DateTime          @default(now())\n  notes   String?\n  assetId Int\n  asset   Asset             @relation(fields: [assetId], references: [id])\n  userId  Int\n  user    User              @relation(fields: [userId], references: [id])\n}\n\nenum TransactionAction {\n  CHECK_OUT\n  CHECK_IN\n}\n",
+  "inlineSchemaHash": "c108c68baeed51a7e4107ff1fdf221f8e0e645f3345e666d354207111afa465d",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"AssetType\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assets\",\"kind\":\"object\",\"type\":\"Asset\",\"relationName\":\"AssetToAssetType\"}],\"dbName\":null},\"Asset\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"serialNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AssetStatus\"},{\"name\":\"purchaseDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"typeId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"object\",\"type\":\"AssetType\",\"relationName\":\"AssetToAssetType\"},{\"name\":\"transactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"AssetToTransaction\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Employee\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"EmployeeToTransaction\"}],\"dbName\":null},\"Transaction\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"action\",\"kind\":\"enum\",\"type\":\"TransactionAction\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assetId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"asset\",\"kind\":\"object\",\"type\":\"Asset\",\"relationName\":\"AssetToTransaction\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToTransaction\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"AssetType\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assets\",\"kind\":\"object\",\"type\":\"Asset\",\"relationName\":\"AssetToAssetType\"}],\"dbName\":null},\"Asset\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"serialNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AssetStatus\"},{\"name\":\"purchaseDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"returnDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"typeId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"object\",\"type\":\"AssetType\",\"relationName\":\"AssetToAssetType\"},{\"name\":\"transactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"AssetToTransaction\"},{\"name\":\"notifications\",\"kind\":\"object\",\"type\":\"NotificationLog\",\"relationName\":\"AssetToNotificationLog\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fcmToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fcmSubscribedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"fcmDeviceInfo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resetToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resetTokenExpiry\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"transactions\",\"kind\":\"object\",\"type\":\"Transaction\",\"relationName\":\"TransactionToUser\"},{\"name\":\"notifications\",\"kind\":\"object\",\"type\":\"NotificationLog\",\"relationName\":\"NotificationLogToUser\"}],\"dbName\":\"users\"},\"NotificationLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sentAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"NotificationLogToUser\"},{\"name\":\"assetId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"asset\",\"kind\":\"object\",\"type\":\"Asset\",\"relationName\":\"AssetToNotificationLog\"}],\"dbName\":null},\"Transaction\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"action\",\"kind\":\"enum\",\"type\":\"TransactionAction\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assetId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"asset\",\"kind\":\"object\",\"type\":\"Asset\",\"relationName\":\"AssetToTransaction\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"TransactionToUser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

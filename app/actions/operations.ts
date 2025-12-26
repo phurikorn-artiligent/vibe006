@@ -9,9 +9,10 @@ import { AssetStatus, TransactionAction } from "@/generated/client";
 
 const checkOutSchema = z.object({
   assetId: z.number().min(1, "Asset is required"),
-  employeeId: z.number().min(1, "Employee is required"),
+  userId: z.number().min(1, "User is required"),
   notes: z.string().optional(),
   date: z.date().default(() => new Date()),
+  returnDate: z.date(),
 });
 
 export async function checkOutAsset(data: z.infer<typeof checkOutSchema>) {
@@ -20,7 +21,18 @@ export async function checkOutAsset(data: z.infer<typeof checkOutSchema>) {
     return { success: false, error: result.error.issues[0]?.message || "Validation failed" };
   }
 
-  const { assetId, employeeId, notes, date } = result.data;
+  const { assetId, userId, notes, date, returnDate } = result.data;
+
+  // Validate returnDate >= date (Assignment Date)
+  // Strip time for comparison to avoid issues with defaults
+  const assignmentDateStart = new Date(date);
+  assignmentDateStart.setHours(0, 0, 0, 0);
+  const returnDateStart = new Date(returnDate);
+  returnDateStart.setHours(0, 0, 0, 0);
+
+  if (returnDateStart < assignmentDateStart) {
+    return { success: false, error: "Return date cannot be earlier than assignment date" };
+  }
 
   try {
     // 1. Verify Asset is AVAILABLE
@@ -42,14 +54,17 @@ export async function checkOutAsset(data: z.infer<typeof checkOutSchema>) {
         data: {
           action: TransactionAction.CHECK_OUT,
           assetId,
-          employeeId,
+          userId,
           date,
           notes,
         },
       }),
       prisma.asset.update({
         where: { id: assetId },
-        data: { status: AssetStatus.IN_USE },
+        data: {
+          status: AssetStatus.IN_USE,
+          returnDate: returnDate
+        },
       }),
     ]);
 
@@ -99,13 +114,13 @@ export async function checkInAsset(data: z.infer<typeof checkInSchema>) {
       return { success: false, error: `Asset is already AVAILABLE.` };
     }
 
-    // Determine the employee from the last transaction (CHECK_OUT)
+    // Determine the user from the last transaction (CHECK_OUT)
     const lastTransaction = asset.transactions[0];
-    const employeeId = lastTransaction?.action === TransactionAction.CHECK_OUT
-      ? lastTransaction.employeeId
+    const userId = lastTransaction?.action === TransactionAction.CHECK_OUT
+      ? lastTransaction.userId
       : undefined;
 
-    if (!employeeId) {
+    if (!userId) {
       // If we can't find who held it, we try to grab *any* employee or fail. 
       // For robustness, if system state is weird, we might want to allow override.
       // But strict logic says: You can't return what wasn't checked out.
@@ -120,7 +135,7 @@ export async function checkInAsset(data: z.infer<typeof checkInSchema>) {
         data: {
           action: TransactionAction.CHECK_IN,
           assetId,
-          employeeId, // The employee returning it
+          userId, // The user returning it
           date,
           notes,
         },

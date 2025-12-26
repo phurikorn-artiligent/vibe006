@@ -135,17 +135,36 @@ exports.Prisma.AssetScalarFieldEnum = {
   status: 'status',
   purchaseDate: 'purchaseDate',
   price: 'price',
+  returnDate: 'returnDate',
   typeId: 'typeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.EmployeeScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
-  department: 'department'
+  password: 'password',
+  role: 'role',
+  department: 'department',
+  image: 'image',
+  fcmToken: 'fcmToken',
+  fcmSubscribedAt: 'fcmSubscribedAt',
+  fcmDeviceInfo: 'fcmDeviceInfo',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry'
+};
+
+exports.Prisma.NotificationLogScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  message: 'message',
+  sentAt: 'sentAt',
+  userId: 'userId',
+  assetId: 'assetId'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -154,7 +173,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   date: 'date',
   notes: 'notes',
   assetId: 'assetId',
-  employeeId: 'employeeId'
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -178,6 +197,11 @@ exports.AssetStatus = exports.$Enums.AssetStatus = {
   RETIRED: 'RETIRED'
 };
 
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  EMPLOYEE: 'EMPLOYEE'
+};
+
 exports.TransactionAction = exports.$Enums.TransactionAction = {
   CHECK_OUT: 'CHECK_OUT',
   CHECK_IN: 'CHECK_IN'
@@ -186,7 +210,8 @@ exports.TransactionAction = exports.$Enums.TransactionAction = {
 exports.Prisma.ModelName = {
   AssetType: 'AssetType',
   Asset: 'Asset',
-  Employee: 'Employee',
+  User: 'User',
+  NotificationLog: 'NotificationLog',
   Transaction: 'Transaction'
 };
 

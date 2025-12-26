@@ -8,7 +8,13 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-export function MobileSidebar() {
+import { Role } from "@/generated/client";
+
+interface MobileSidebarProps {
+  role?: Role;
+}
+
+export function MobileSidebar({ role }: MobileSidebarProps) {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,20 +39,8 @@ export function MobileSidebar() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0 bg-gray-900 border-gray-800 text-white w-72">
-        <SidebarBase />
+        <Sidebar role={role} />
       </SheetContent>
     </Sheet>
   );
-}
-
-// Extracting the inner part of Sidebar or reusing Sidebar?
-// Sidebar component has internal styling "h-full bg-[#111827]..."
-// If we just render <Sidebar /> inside SheetContent, it might double the containers or mismatch.
-// Let's modify Sidebar to be reusable or just use it as is if it fits.
-// Checking Sidebar code: It returns a div with "h-full bg-[#111827] ...". 
-// SheetContent has default padding, we removed it with p-0.
-// So <Sidebar /> should work fine.
-
-function SidebarBase() {
-    return <Sidebar />; 
 }
